@@ -1,0 +1,15 @@
+{% sw_extends '@Storefront/storefront/page/checkout/checkout-aside-item.html.twig' %}
+
+{% block page_checkout_aside_item_image_inner%}
+    {% if lineItem.payload.shirtnetwork %}
+    <a
+       href="{{ designer_config_link(lineItem.payload.shirtnetwork) }}"
+       class="cart-item-img-link"
+       title="{{ lineItem.label }}"
+    >
+        <img class="img-fluid cart-item-img" alt="{{ (lineItem.cover.translated.alt ?: '') }}" title="{{ (lineItem.cover.translated.title ?: '') }}" src="{{ lineItem.payload.shirtnetworkconfig.views.0.icon }}" />
+    </a>
+    {% else %}
+        {{ parent() }}
+    {% endif %}
+{% endblock %}

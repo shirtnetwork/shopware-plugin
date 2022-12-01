@@ -1,0 +1,74 @@
+<sw-modal :title="$tc('shirtnetwork-sync.modal.title')"
+          v-on="$listeners">
+    <template v-if="!isLoading">
+
+        <sw-alert variant="info" appearance="default" :showIcon="false" :closable="false">
+            {{ $tc('shirtnetwork-sync.modal.message') }}
+        </sw-alert>
+        <sw-container columns="1fr 1fr" gap="0px 30px">
+            <sw-entity-single-select
+                :label="$tc('shirtnetwork-sync.modal.variantPropertyGroup')"
+                :placeholder="$tc('shirtnetwork-sync.modal.variantPropertyGroupPlaceholder')"
+                entity="property_group"
+                :context="selectContext"
+                v-model="selectedVariantPropertyGroup">
+            </sw-entity-single-select>
+
+            <sw-entity-single-select
+                :label="$tc('shirtnetwork-sync.modal.sizePropertyGroup')"
+                :placeholder="$tc('shirtnetwork-sync.modal.sizePropertyGroupPlaceholder')"
+                entity="property_group"
+                :context="selectContext"
+                v-model="selectedSizePropertyGroup">
+            </sw-entity-single-select>
+        </sw-container>
+        <sw-container columns="1fr 1fr" gap="0px 30px">
+            <sw-entity-multi-id-select
+                v-if="selectedSalesChannels"
+                :label="$tc('shirtnetwork-sync.modal.salesChannel')"
+                :repository="salesChannelRepository"
+                :context="selectContext"
+                :ids="selectedSalesChannels"
+                @change="setSalesChannels">
+            </sw-entity-multi-id-select>
+
+            <sw-entity-single-select
+                :label="$tc('shirtnetwork-sync.modal.tax')"
+                entity="tax"
+                :context="selectContext"
+                v-model="selectedTax">
+            </sw-entity-single-select>
+        </sw-container>
+        <sw-category-tree-field
+            :categoriesCollection="categories"
+            class="sw-product-detail__select-category"
+            :placeholder="$tc('sw-product.categoryForm.placeholderCategory')">
+        </sw-category-tree-field>
+        <sw-checkbox-field :label="$tc('shirtnetwork-sync.modal.variantExpressionForListings')" v-model="variantExpressionForListings"></sw-checkbox-field>
+
+
+    </template>
+    <template v-else-if="isCanceled">
+        <p class="shirtnetwork-sync-modal__progress-text">Vorgang wird abgebrochen ...</p>
+    </template>
+    <template v-else>
+        <p class="shirtnetwork-sync-modal__progress-text">Produkte werden synchronisiert {{ progress }}%</p>
+        <sw-progress-bar :value="progress" :maxValue="100">
+
+        </sw-progress-bar>
+    </template>
+
+    <template #modal-footer>
+        <slot name="bulk-modal-cancel">
+            <sw-button @click="cancel" size="small" v-if="isLoading" :isLoading="isCanceled">
+                {{ $tc('global.default.cancel') }}
+            </sw-button>
+        </slot>
+
+        <slot name="bulk-modal-sync-items">
+            <sw-button @click="syncProducts" variant="primary" size="small" :isLoading="isLoading">
+                {{ $tc('shirtnetwork-sync.modal.confirm') }}
+            </sw-button>
+        </slot>
+    </template>
+</sw-modal>

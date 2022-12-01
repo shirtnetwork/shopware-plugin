@@ -1,0 +1,10 @@
+{% block element_designer %}
+    <div class="cms-element-designer" style="height: 100%; width: 100%">
+
+        {% block element_designer_inner %}
+            {% set shirtnetworkPluginOptions = element.data %}
+            <template id="shirtnetwork-designer" data-shirtnetwork-plugin data-shirtnetwork-plugin-options="{{ shirtnetworkPluginOptions|default({})|json_encode|escape('html_attr') }}"></template>
+            {% block designer_overrides %}{% endblock %}
+        {% endblock %}
+    </div>
+{% endblock %}

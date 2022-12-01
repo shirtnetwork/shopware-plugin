@@ -1,0 +1,44 @@
+{
+    "name": "shirtnetwork/designer-shopware",
+    "description": "Shirtnetwork Connector for Shopware 6",
+    "version": "1.1.5",
+    "type": "shopware-platform-plugin",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Aggrosoft GmbH",
+            "role": "Manufacturer",
+            "homepage": "https://www.shirtnetwork.de"
+        }
+    ],
+    "require": {
+        "shopware/core": "~6.4.11",
+        "nikic/php-parser": "*",
+        "friendsofphp/php-cs-fixer": "*",
+        "psy/psysh": "^0.11.9"
+    },
+    "config": {
+        "platform": {
+            "php": "7.4.3"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Aggrosoft\\Shopware\\ShirtnetworkPlugin\\": "src/"
+        }
+    },
+    "extra": {
+        "shopware-plugin-class": "Aggrosoft\\Shopware\\ShirtnetworkPlugin\\ShirtnetworkPlugin",
+        "copyright": "(c) 2020 Aggrosoft GmbH",
+        "label": {
+            "de-DE": "Shirtnetwork Connector",
+            "en-GB": "Shirtnetwork Connector"
+        },
+        "encoder": {
+            "include": [
+                "src/Subscriber/OrderSubscriber.php",
+                "src/Core/Shirtnetwork/ApiClient.php"
+            ]
+        }
+    }
+}

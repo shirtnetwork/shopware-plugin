@@ -1,0 +1,19 @@
+{% sw_extends '@Storefront/storefront/component/buy-widget/buy-widget.html.twig' %}
+
+{% block buy_widget_buy_form %}
+    {{ parent() }}
+    {% if product.available and product.translated.customFields.is_shirtnetwork %}
+        <div class="form-row shirtnetwork-buy-widget-container">
+            <div class="col-12">
+                {% block page_product_detail_shirtnetwork_button %}
+                    <a class="btn btn-info btn-block btn-shirtnetwork"
+                       href="{{ designer_link(product) }}"
+                       title="{{ "shirtnetwork.detail.configureProduct"|trans|striptags }}"
+                       aria-label="{{ "shirtnetwork.detail.configureProduct"|trans|striptags }}">
+                        {{ "shirtnetwork.detail.configureProduct"|trans|sw_sanitize }}
+                    </a>
+                {% endblock %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

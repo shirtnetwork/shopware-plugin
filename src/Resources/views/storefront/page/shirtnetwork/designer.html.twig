@@ -1,0 +1,22 @@
+{% sw_extends "@Storefront/storefront/base.html.twig" %}
+
+{% block base_head %}
+    {{ parent() }}
+    <link href="{{ asset('bundles/shirtnetworkplugin/fontawesome/css/all.min.css') }}" rel="stylesheet">
+{% endblock %}
+
+{# https://cdn.shirtnetwork.de/client/shirtnetwork-client.js #}
+{% set shirtnetworkPluginOptions = page.shirtnetworkPluginOptions %}
+{% block base_content %}
+    <template id="shirtnetwork-designer" data-shirtnetwork-plugin data-shirtnetwork-plugin-options="{{ shirtnetworkPluginOptions|default({})|json_encode|escape('html_attr') }}"></template>
+
+    {% block designer_overrides %}{% endblock %}
+{% endblock %}
+
+{% block base_script_router %}
+    {{ parent() }}
+    {# Register all routes that will be needed in JavaScript to the window.router object #}
+    <script>
+        window.router['frontend.checkout.cart.page'] = '{{ path('frontend.checkout.cart.page') }}';
+    </script>
+{% endblock %}

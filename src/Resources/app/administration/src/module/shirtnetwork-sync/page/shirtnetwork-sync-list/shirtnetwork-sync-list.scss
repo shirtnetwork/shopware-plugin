@@ -1,0 +1,52 @@
+@import "~scss/variables";
+
+$shirtnetwork-sync-list-color-error: $color-crimson-500;
+$shirtnetwork-sync-list-color-success: $color-emerald-500;
+
+.shirtnetwork-sync-list {
+
+    .smart-bar__actions {
+        .sw-sales-channel-switch {
+            width: 300px;
+            .sw-field {
+                margin-bottom: 0;
+                text-align: left;
+            }
+        }
+    }
+
+    .shirtnetwork-sync-list__content {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+    }
+
+    .is--inactive {
+        color: $shirtnetwork-sync-list-color-error;
+    }
+
+    .is--active {
+        color: $shirtnetwork-sync-list-color-success;
+    }
+
+    .shirtnetwork-sync-list__metadata-customer-guest-label {
+        margin: 0 0 0 12px;
+        text-align: center;
+    }
+
+    .sw-label.shirtnetwork-sync-list__requested-group-label {
+        background: $color-module-orange-500;
+        color: $color-white;
+        font-weight: 600;
+    }
+}
+
+.shirtnetwork-sync-list__sidebar {
+    .sw-sidebar-item__scrollable-container {
+        padding: 0 25px;
+    }
+
+    .sw-filter-panel {
+        padding: 0;
+    }
+}

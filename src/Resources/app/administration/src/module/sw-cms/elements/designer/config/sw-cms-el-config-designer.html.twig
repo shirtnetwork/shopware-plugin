@@ -1,0 +1,54 @@
+<!-- eslint-disable-next-line sw-deprecation-rules/no-twigjs-blocks -->
+{% block sw_cms_element_designer_config %}
+    <div class="sw-cms-el-config-designer">
+        <!-- eslint-disable-next-line sw-deprecation-rules/no-twigjs-blocks -->
+        {% block sw_cms_element_designer_config_product_select %}
+        <sw-cms-mapping-field
+                v-model="element.config.product"
+                entity="product"
+                value-types="string"
+                :label="$tc('sw-cms.elements.designer.config.label.selection')"
+        >
+            <sw-entity-single-select
+                    ref="cmsProductSelection"
+                    v-model="element.config.product.value"
+                    :placeholder="$tc('sw-cms.elements.designer.config.placeholder.selection')"
+                    entity="product"
+                    :criteria="productCriteria"
+                    :context="productSelectContext"
+                    show-clearable-button
+                    @change="onProductChange"
+            >
+                <template #selection-label-property="{ item }">
+                    <sw-product-variant-info
+                            :variations="item.variation"
+                    >
+                        {{ item.translated.name || item.name }}
+                    </sw-product-variant-info>
+                </template>
+                <template #result-item="{ item, index }">
+                    <slot
+                            name="result-item"
+                            v-bind="{ item, index }"
+                    >
+                        <li
+                                is="sw-select-result"
+                                v-bind="{ item, index }"
+                        >
+                            <!-- eslint-disable-next-line sw-deprecation-rules/no-twigjs-blocks -->
+                            {% block sw_entity_single_select_base_results_list_result_label %}
+                                <span class="sw-select-result__result-item-text">
+                        <sw-product-variant-info :variations="item.variation">
+                            {{ item.translated.name || item.name }}
+                        </sw-product-variant-info>
+                    </span>
+                            {% endblock %}
+                        </li>
+                    </slot>
+                </template>
+            </sw-entity-single-select>
+        </sw-cms-mapping-field>
+        {% endblock %}
+
+    </div>
+{% endblock %}

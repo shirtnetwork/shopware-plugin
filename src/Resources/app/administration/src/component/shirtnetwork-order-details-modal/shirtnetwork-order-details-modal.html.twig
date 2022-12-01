@@ -1,0 +1,50 @@
+<sw-modal :title="title" v-on="$listeners" variant="full">
+    <sw-tabs @new-item-active="tabChanged" :default-item="item.infos.views[0].view.key" :small="false">
+        <template #default="{ active }">
+            <sw-tabs-item  v-for="view in item.infos.views" :name="view.view.key" :activeTab="active">
+                {{ view.view.name }}
+                <sw-label class="shirtnetwork-order-details-modal-tab-object-count" variant="info" size="small" appearance="circle" :ghost="getViewObjectCount(view.view.key) ? false : true" :caps="false">
+                    {{ getViewObjectCount(view.view.key) }}
+                </sw-label>
+            </sw-tabs-item>
+        </template>
+        <template #content="{ active }">
+            <sw-container columns="1fr 1fr">
+                <div v-if="activeView">
+                    <img  class="shirtnetwork-order-details-modal-picture" :src="activeView.picture">
+                </div>
+                <div v-if="activeObjects">
+                    <sw-card-view style="position: relative;max-height: 700px;overflow-y: scroll;">
+                        <sw-card v-for="object in activeObjects" :title="$tc('shirtnetwork-order.details.objectType.'+object.type)">
+                            <sw-description-list>
+                                <dt v-if="object.type === 'text'">{{ $tc('shirtnetwork-order.details.objectText') }}</dt>
+                                <dd v-if="object.type === 'text'"><pre>{{ object.text }}</pre></dd>
+                                <dt v-if="object.type === 'user-logo'">{{ $tc('shirtnetwork-order.details.objectFile') }}</dt>
+                                <dd v-if="object.type === 'user-logo'">
+                                    <div>
+                                        <a :href="object.picture" target="_blank" class="shirtnetwork-order-details-upload-preview-link">
+                                            <img :src="object.picture" :alt="$tc('shirtnetwork-order.details.objectFilePreview')" class="shirtnetwork-order-details-upload-preview-image">
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <a :href="object.original" target="_blank">
+                                            {{ $tc('shirtnetwork-order.details.objectFileDownload') }}
+                                        </a>
+                                    </div>
+                                </dd>
+                                <dt v-if="hasFills(object)">{{ $tc('shirtnetwork-order.details.objectFills') }}</dt>
+                                <dd v-if="hasFills(object)">
+                                    <div v-for="(fill,fillIndex) in object.fills" v-if="fill">{{ $tc('shirtnetwork-order.details.objectFill') }} {{ fillIndex + 1 }}: {{ fill.name }}</div>
+                                </dd>
+                                <dt>{{ $tc('shirtnetwork-order.details.objectPrinttype') }}</dt>
+                                <dd>{{ object.printtype }}</dd>
+                                <dt v-if="object.dimensions">{{ $tc('shirtnetwork-order.details.objectDimensions') }}</dt>
+                                <dd v-if="object.dimensions">{{ formatDimension(object.dimensions.width) }} x {{ formatDimension(object.dimensions.height) }} cm</dd>
+                            </sw-description-list>
+                        </sw-card>
+                    </sw-card-view>
+                </div>
+            </sw-container >
+        </template>
+    </sw-tabs>
+</sw-modal>

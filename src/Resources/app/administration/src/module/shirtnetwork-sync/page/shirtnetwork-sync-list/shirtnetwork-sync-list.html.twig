@@ -1,0 +1,82 @@
+{% block shirtnetwork_sync_list %}
+    <sw-page class="shirtnetwork-sync-list">
+
+        {% block shirtnetwork_sync_list_smart_bar_header %}
+            <template #smart-bar-header>
+                {% block shirtnetwork_sync_list_smart_bar_header_title %}
+                    <h2>
+                        {% block shirtnetwork_sync_list_smart_bar_header_title_text %}
+                            {{ $tc('shirtnetwork-sync.list.textProducts') }}
+                        {% endblock %}
+
+                        {% block shirtnetwork_sync_list_smart_bar_header_amount %}
+                            <span v-if="!isLoading" class="sw-page__smart-bar-amount">
+                                ({{ pagination.total }})
+                            </span>
+                        {% endblock %}
+
+                    </h2>
+                {% endblock %}
+            </template>
+        {% endblock %}
+
+        {% block shirtnetwork_sync_list_smart_bar_actions %}
+            <template #smart-bar-actions>
+                <!-- eslint-disable-next-line sw-deprecation-rules/no-twigjs-blocks -->
+                {% block shirtnetwork_sync_list_smart_bar_actions_saleschannel_switch %}
+                    <sw-sales-channel-switch @change-sales-channel-id="salesChannelChange" />
+                {% endblock %}
+            </template>
+        {% endblock %}
+
+        <template #content>
+            {% block shirtnetwork_sync_list_content %}
+                <div class="shirtnetwork-sync-list__content">
+                    {% block shirtnetwork_sync_list_grid %}
+                    <sw-data-grid ref="shirtnetworkSyncListGrid"
+                                  :dataSource="products"
+                                  :columns="gridColumns"
+                                  :fullPage="false"
+                                  :showSettings="false"
+                                  :showSelection="true"
+                                  :showActions="false"
+                                  :isLoading="isLoading"
+                                  :allowColumnEdit="false"
+                                  :allowInlineEdit="false"
+                                  :compactMode="true"
+                                  @selection-change="selectionChange"
+                                  identifier="shirtnetwork-sync-list-item-grid"
+                                  class="shirtnetwork-sync-list-items-grid__data-grid">
+                        <template #column-active="{ item }">
+                            <sw-icon v-if="item.active" name="small-default-checkmark-line-medium" small class="is--active"></sw-icon>
+                            <sw-icon v-else name="small-default-x-line-medium" small class="is--inactive"></sw-icon>
+                        </template>
+                        <template #bulk>
+                            <a class="link link-danger" @click="showBulkSyncModal = true">
+                                {{ $tc('shirtnetwork-sync.list.bulkSyncProducts') }}
+                            </a>
+                        </template>
+                        <template #bulk-modals>
+                            <shirtnetwork-sync-modal :sales-channel-id="salesChannelId" :selection="selection" v-if="showBulkSyncModal" @modal-close="showBulkSyncModal = false" />
+                        </template>
+                        <template #pagination>
+                            <sw-pagination :total="pagination.total" :limit="pagination.limit" :page="pagination.page" @page-change="paginationChange"></sw-pagination>
+                        </template>
+                    </sw-data-grid>
+                    {% endblock %}
+
+
+
+                    {% block shirtnetwork_sync_list_empty_state %}
+                        <sw-empty-state v-if="!isLoading && !pagination.total" :title="$tc('shirtnetwork-sync.list.messageEmpty')"></sw-empty-state>
+                    {% endblock %}
+
+                    {% block shirtnetwork_sync_list_grid_loader %}
+                        <sw-loader v-if="isLoading"></sw-loader>
+                    {% endblock %}
+                </div>
+            {% endblock %}
+        </template>
+
+    </sw-page>
+{% endblock %}

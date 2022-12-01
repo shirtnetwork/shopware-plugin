@@ -1,0 +1,32 @@
+{
+    "shirtnetwork-sync": {
+        "general": {
+            "mainMenuItemGeneral": "Shirtnetwork Synchronisation"
+        },
+        "list": {
+            "columnId": "ID",
+            "columnActive": "Aktiv",
+            "columnName": "Titel",
+            "columnSku": "Artikelnummer",
+            "columnPrice": "Preis",
+            "columnDescription": "Beschreibung",
+            "bulkSyncProducts": "Produkte synchronisieren",
+            "textProducts": "Shirtnetwork Produkte",
+            "messageEmpty": "Keine Shirtnetwork Produkte gefunden, prüfen Sie die Plugin Einstellungen"
+        },
+        "modal": {
+            "title": "Produkte synchronisieren",
+            "message": "Vorhandene Daten werden überschrieben, legen Sie die Voreinstellungen für die Produkte fest",
+            "variantPropertyGroup": "Eigenschaft für Varianten",
+            "variantPropertyGroupPlaceholder": "z.B. Farbe",
+            "sizePropertyGroup": "Eigenschaft für Größen",
+            "sizePropertyGroupPlaceholder": "z.B. Größe",
+            "salesChannel": "Verkaufskanäle",
+            "salesChannelPlaceholder": "Diese Verkaufskanäle werden den Produkten automatisch zugewiesen",
+            "tax": "Steuersatz",
+            "taxPlaceholder": "Dieser Steuersatz wird den Produkten automatisch zugewiesen",
+            "variantExpressionForListings": "Varianten in Listings anzeigen",
+            "confirm": "Synchronisieren"
+        }
+    }
+}

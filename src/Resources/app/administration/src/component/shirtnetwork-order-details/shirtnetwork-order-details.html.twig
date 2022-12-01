@@ -1,0 +1,49 @@
+{% block shirtnetwork_order_details %}
+    <sw-card class="shirtnetwork-order-details sw-card--grid" :title="title">
+        {% block shirtnetwork_order_details_lineitems %}
+            <sw-container class="sw-order-line-items-grid__actions-container"
+                          columns="1fr" type="row">
+                <sw-button-group class="shirtnetwork-order-details-print-buttons">
+                    <sw-button block :disabled="!epsToolConnected">
+                        <sw-icon name="default-action-circle-download"></sw-icon>
+                        {{ $tc('shirtnetwork-order.details.generateFiles') }}
+                    </sw-button>
+                    <sw-button block @click="checkEpsToolConnection">
+                        <sw-icon name="default-device-dashboard"></sw-icon>
+                        {{ $tc('shirtnetwork-order.details.checkConnection') }}
+                    </sw-button>
+                </sw-button-group>
+                <sw-data-grid :dataSource="items"
+                              :columns="gridColumns"
+                              :fullPage="false"
+                              :showSettings="false"
+                              :showSelection="false"
+                              :showActions="true"
+                              :isLoading="isLoading"
+                              :allowColumnEdit="false"
+                              :allowInlineEdit="false"
+                              :compactMode="true"
+                              identifier="shirtnetwork-order-line-item-grid"
+                              class="shirtnetwork-order-line-items-grid__data-grid">
+                    <template #column-infos.views="{ item }">
+                        <div class="shirtnetwork-order-details-pictures" v-if="item.infos">
+                            <img :src="view.icon" class="sw-product-image shirtnetwork-order-details-picture"  v-for="view in item.infos.views" @click.prevent="viewPictureClick(view)"/>
+                        </div>
+                    </template>
+                    <template #actions="{ item }">
+                        <sw-context-menu-item :disabled="!item.infos"
+                                              icon="default-eye-open"
+                                              @click="contextMenuShowDetails(item)"
+                                              >
+                            {{ $tc('shirtnetwork-order.details.contextMenuShowDetails') }}
+                        </sw-context-menu-item>
+                    </template>
+                </sw-data-grid>
+                <sw-modal :title="$tc('shirtnetwork-order.details.modalViewTitle')" v-if="showViewModal" @modal-close="viewModalClose">
+                    <img :src="selectedModalView" class="shirtnetwork-order-details-modal-picture">
+                </sw-modal>
+                <shirtnetwork-order-details-modal v-if="showDetailsModal" :item="selectedItem" :title="$tc('shirtnetwork-order.details.modalDetailsTitle')" @modal-close="detailsModalClose" />
+            </sw-container>
+        {% endblock %}
+    </sw-card>
+{% endblock %}

@@ -1,0 +1,34 @@
+{
+    "shirtnetwork-order": {
+        "detailBase": {
+            "cardTitleLineItems": "Personalisierung"
+        },
+        "details": {
+            "columnProductName": "Artikel",
+            "columnProductQuantity": "Menge",
+            "columnViewPictures": "Ansichten",
+            "modalViewTitle": "Vorschau",
+            "printRoutingSlip": "Laufzettel drucken",
+            "generateFiles": "Druckdateien generieren",
+            "checkConnection": "Verbindung prüfen",
+            "contextMenuShowDetails": "Gestaltung anzeigen",
+            "modalDetailsTitle": "Gestaltungs Details",
+            "objectText": "Text",
+            "objectFills": "Farben",
+            "objectFill": "Farbe",
+            "objectPrinttype": "Druckart",
+            "objectDimensions": "Größe",
+            "objectFile": "Upload",
+            "objectFileDownload": "Original herunterladen",
+            "objectFilePreview": "Vorschau",
+            "objectType": {
+                "text": "Text",
+                "logo": "Motiv",
+                "user-logo": "Upload"
+            },
+            "printRoutingSlip": "Laufzettel drucken",
+            "generateFiles": "Druckdaten generieren",
+            "checkConnection": "EPS-Tool Verbindung prüfen"
+        }
+    }
+}

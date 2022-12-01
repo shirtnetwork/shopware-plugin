@@ -1,0 +1,182 @@
+{% sw_extends '@Framework/documents/base.html.twig' %}
+
+{% block document_title_tag %}
+    {% trans with {'%routingSlipNumber%': config.custom.routingSlipNumber, '%orderNumber%':  order.orderNumber} %}shirtnetwork-order.details.routingSlipHeadline{% endtrans %}
+{% endblock %}
+
+{% block document_headline %}
+    <h1>{% trans with {'%routingSlipNumber%': config.custom.routingSlipNumber, '%orderNumber%':  order.orderNumber} %}shirtnetwork-order.details.routingSlipHeadline{% endtrans %}</h1>
+    <style>
+        .shirtnetwoork-order-details-object-list,.shirtnetwoork-order-details-object-list li{
+            margin: 0;
+        }
+    </style>
+{% endblock %}
+
+    {% set firstDelivery = order.deliveries|first %}
+    {% set deliveryAddressId = firstDelivery.shippingOrderAddressId %}
+    {% set deliveryAddress = order.addresses.get(deliveryAddressId) %}
+
+{% block document_recipient %}
+    <span class="sender-address-small">
+        {% block document_recipient_sender %}
+            {{ config.companyAddress }}<br><br>
+        {% endblock %}
+    </span>
+    {% if deliveryAddress.company %}
+        {{ deliveryAddress.company }}<br>
+    {% endif %}
+    {{ deliveryAddress.firstName }} {{ deliveryAddress.lastName }}<br>
+    {{ deliveryAddress.street }}<br>
+    {% if deliveryAddress.additionalAddressLine1 %}
+        {{ deliveryAddress.additionalAddressLine1 }}<br>
+    {% endif %}
+    {% if deliveryAddress.additionalAddressLine2 %}
+        {{ deliveryAddress.additionalAddressLine2 }}<br>
+    {% endif %}
+    {{ deliveryAddress.zipcode }} {{ deliveryAddress.city }}<br>
+    {{ deliveryAddress.country.name }}<br>
+{% endblock %}
+
+{% block position_header %}
+    <thead>
+    <tr class="line-item-table-header">
+        {% block document_line_item_table_head %}
+            {% block document_line_item_table_head_position %}
+                {% if config.displayLineItemPosition %}
+                    <th>{{ 'document.lineItems.header.position'|trans|sw_sanitize }}</th>
+                {% endif %}
+            {% endblock %}
+
+            {% block document_line_item_table_head_product_number %}
+                <th>{{ 'document.lineItems.header.productNumber'|trans|sw_sanitize  }}</th>
+            {% endblock %}
+
+            {% block document_line_item_table_head_label %}
+                <th>{{ 'document.lineItems.header.label'|trans|sw_sanitize }}</th>
+            {% endblock %}
+
+            {% block document_line_item_table_head_quantity %}
+                <th class="numbers">{{ 'document.lineItems.header.quantity'|trans|sw_sanitize }}</th>
+            {% endblock %}
+        {% endblock %}
+    </tr>
+    </thead>
+{% endblock %}
+
+{% block document_line_item_table_rows %}
+    {% block document_line_item_table_row_position %}
+        {% if config.displayLineItemPosition %}
+            <td>{{ prefix ~ position }}</td>
+        {% endif %}
+    {% endblock %}
+
+    {% block document_line_item_table_row_product_number %}
+        {% if lineItem.payload.productNumber %}
+            <td>{{ lineItem.payload.productNumber }}</td>
+        {% else %}
+            <td></td>
+        {% endif %}
+    {% endblock %}
+
+    {% block document_line_item_table_row_label %}
+        <td class="line-item-breakable">
+            {% if level > 0 %}
+                {% for i in 1..level %}
+                    <span class="wrapper-wrapper">
+                                    <span class="label-wrapper level-{{ i }}"></span>
+                                </span>
+                {% endfor %}
+            {% endif %}
+
+            <span class="line-item-label level-{{ level }}">{{ lineItem.label }}</span>
+            {% if lineItem.payload.options|length >= 1 %}
+                <br/>
+                {% for option in lineItem.payload.options %}
+                    {{ option.group }}: {{ option.option }}
+                    {% if lineItem.payload.options|last != option %}
+                        {{ " | " }}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+            {% if lineItem.payload.features|length >=1  %}
+                <br/>
+                {% for feature in lineItem.payload.features %}
+                    {% if feature.type == 'referencePrice' %}
+                        {{ feature.value.purchaseUnit|sw_sanitize }} {{ feature.value.unitName|sw_sanitize }}
+                        ({{ feature.value.price|currency(currencyIsoCode) }}{{ "general.star"|trans }} / {{ feature.value.referenceUnit|sw_sanitize }} {{ feature.value.unitName|sw_sanitize }})
+                        {% if lineItem.payload.features|last != feature %}
+                            {{ " | " }}
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </td>
+    {% endblock %}
+
+    {% block document_line_item_table_row_quantity %}
+        <td class="align-right">{{ lineItem.quantity }}</td>
+    {% endblock %}
+
+    {% set orderConfig = orderConfigs[lineItem.id] %}
+    {% if orderConfig %}
+    </tr>
+        {% for view in orderConfig.views %}
+            <tr class="line-item">
+                <td>
+                    <img src="{{ view.thumb }}">
+                </td>
+                <td colspan="{% if config.displayLineItemPosition %}2{% else %}3{% endif %}">
+                    {% for object in orderConfig.objects %}
+                        {% if object.view == view.view.key %}
+                            <h4>{{ ('shirtnetwork-order.details.objectType.'~object.type)|trans|sw_sanitize }}</h4>
+                            <ul class="shirtnetwoork-order-details-object-list">
+                                {% if object.type == 'text' %}
+                                    <li><strong>{{ 'shirtnetwork-order.details.objectText'|trans|sw_sanitize }}</strong><br/>
+                                        <pre>{{ object.text }}</pre></li>
+                                {% endif %}
+                                {% if object.type == 'user-logo' %}
+                                    <li><strong>{{ 'shirtnetwork-order.details.objectFile'|trans|sw_sanitize }}</strong><br/>
+                                        <img src="{{ object.picture }}" height="50">
+                                    </li>
+                                {% endif %}
+                                {% if object.type == 'logo' %}
+                                    <li><strong>{{ 'shirtnetwork-order.details.objectLogo'|trans|sw_sanitize }}</strong><br/>
+                                        <img src="{{ object.picture }}" height="50">
+                                    </li>
+                                {% endif %}
+                                <li><strong>{{ 'shirtnetwork-order.details.objectFills'|trans|sw_sanitize }}</strong><br/>
+                                    {% for fill in object.fills %}
+                                        {{ 'shirtnetwork-order.details.objectFill'|trans|sw_sanitize  }} {{ loop.index }}: {{ fill.name }}<br/>
+                                    {% endfor %}
+                                </li>
+
+                                <li><strong>{{ 'shirtnetwork-order.details.objectPrinttype'|trans|sw_sanitize }}</strong><br/>
+                                    {{ object.printtype }}</li>
+
+                                <li><strong>{{ 'shirtnetwork-order.details.objectDimensions'|trans|sw_sanitize }}</strong><br/>
+                                    {{ object.dimensions.width|number_format(2) }} x {{ object.dimensions.height|number_format(2) }} cm</li>
+                            </ul>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+
+{% endblock %}
+
+{% block document_side_info_contents %}
+    {{ parent() }}
+    <tr><td>{% trans with {'%deliveryDate%': config.custom.deliveryDate|format_date('medium', locale=order.saleschannel.language.locale.code)} %}document.deliveryDate{% endtrans %}</td></tr>
+{% endblock %}
+
+{% block document_line_item_table_shipping %}
+{% endblock %}
+
+{% block document_sum %}
+{% endblock %}
+
+{% block payment_shipping %}
+{% endblock %}

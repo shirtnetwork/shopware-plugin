@@ -1,0 +1,22 @@
+{% block element_designer_description %}
+    <div class="cms-element-designer-description" data-shirtnetwork-description-plugin>
+        {% block element_designer_description_inner %}
+        <ul class="nav nav-tabs" id="designer-description-tabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="designer-description-description-tab" data-toggle="tab" href="#designer-description-description-content" role="tab" aria-controls="designer-description-content" aria-selected="true">Beschreibung</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="designer-description-reviews-tab" data-toggle="tab" href="#designer-description-reviews-content" role="tab" aria-controls="designer-description-reviews-content" aria-selected="false">Bewertungen</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="designer-description-description-content" role="tabpanel" aria-labelledby="designer-description-description-tab">
+
+            </div>
+            <div class="tab-pane fade" id="designer-description-reviews-content" role="tabpanel" aria-labelledby="designer-description-reviews-tab">
+
+            </div>
+        </div>
+        {% endblock %}
+    </div>
+{% endblock %}

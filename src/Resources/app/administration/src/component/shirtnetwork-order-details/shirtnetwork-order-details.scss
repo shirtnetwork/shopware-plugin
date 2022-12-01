@@ -1,0 +1,22 @@
+.shirtnetwork-order-details-pictures{
+    display: flex;
+    align-items: stretch;
+}
+
+.shirtnetwork-order-details-picture{
+    margin-right: 5px;
+    margin-bottom: 5px;
+    max-height: 22px;
+    cursor: pointer;
+}
+
+.shirtnetwork-order-details-modal-picture {
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+}
+
+.shirtnetwork-order-details-print-buttons {
+    padding: 5px;
+    border-bottom: 1px solid #d1d9e0;
+}

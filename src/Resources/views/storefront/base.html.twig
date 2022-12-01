@@ -1,0 +1,9 @@
+{% sw_extends '@Storefront/storefront/base.html.twig' %}
+
+{% block base_script_router %}
+    {{ parent() }}
+    {# Register all routes that will be needed in JavaScript to the window.router object #}
+    <script>
+        window.router['frontend.checkout.cart.page'] = '{{ path('frontend.checkout.cart.page') }}';
+    </script>
+{% endblock %}

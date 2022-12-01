@@ -1,0 +1,141 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Storefront\Controller\ShirtnetworkDesignerController" public="true">
+            <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Storefront\Page\Shirtnetwork\ShirtnetworkDesignerPageLoader"/>
+            <argument type="service" id="Shopware\Storefront\Page\Product\Review\ProductReviewLoader"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+        <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Storefront\Page\Shirtnetwork\ShirtnetworkDesignerPageLoader" public="true">
+            <argument type="service" id="Shopware\Storefront\Page\GenericPageLoader" />
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\DesignerPluginOptionBuilder"/>
+        </service>
+
+        <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Storefront\Controller\ShirtnetworkDesignerConfigController" public="true">
+            <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Storefront\Page\Shirtnetwork\Config\ShirtnetworkDesignerConfigPageLoader"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+        <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Storefront\Page\Shirtnetwork\Config\ShirtnetworkDesignerConfigPageLoader" public="true">
+            <argument type="service" id="Shopware\Storefront\Page\GenericPageLoader" />
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\ConfigHelper"/>
+        </service>
+
+        <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Administration\Controller\ShirtnetworkApiController" public="true">
+            <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\ConfigHelper"/>
+            <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\ApiClient"/>
+            <argument type="service" id="order.repository"/>
+            <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\ProductSyncer"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+
+        <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\DataResolver\DesignerCmsElementResolver">
+            <argument type="service" id="product.repository"/>
+            <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\DesignerPluginOptionBuilder"/>
+            <argument type="service" id="request_stack"/>
+            <tag name="shopware.cms.data_resolver" />
+        </service>
+
+        <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\DesignerPluginOptionBuilder" public="true">
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="router"/>
+            <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\ApiClient"/>
+        </service>
+
+        <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\ApiClient" public="true">
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="cache.object"/>
+        </service>
+        <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\ProductSyncer" public="true">
+            <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\ApiClient"/>
+            <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\MediaSyncer"/>
+            <argument type="service" id="product.repository"/>
+            <argument type="service" id="product_media.repository"/>
+            <argument type="service" id="product_visibility.repository"/>
+            <argument type="service" id="property_group_option.repository"/>
+            <argument type="service" id="tax.repository"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+        </service>
+        <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\MediaSyncer" public="true">
+            <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\ApiClient"/>
+            <argument type="service" id="Shopware\Core\Content\Media\MediaService"/>
+            <argument type="service" id="Shopware\Core\Content\Media\File\FileFetcher"/>
+            <argument type="service" id="Shopware\Core\Content\Media\File\FileSaver"/>
+            <argument type="service" id="Shopware\Core\Content\Media\File\FileNameProvider"/>
+            <argument type="service" id="media.repository"/>
+            <argument type="service" id="media_folder.repository"/>
+        </service>
+        <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\ConfigHelper" public="true">
+            <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\ApiClient"/>
+        </service>
+        <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\PriceCalculator" public="true">
+            <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\ApiClient"/>
+            <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\ConfigHelper"/>
+        </service>
+        <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\SkuMatcher" public="true">
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="Shopware\Core\Framework\Adapter\Twig\StringTemplateRenderer"/>
+        </service>
+        <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Cart\Checkout\ShirtnetworkPriceCollector">
+            <argument type="service" id="Shopware\Core\Checkout\Cart\Price\QuantityPriceCalculator"/>
+            <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\PriceCalculator"/>
+
+            <!-- after product processor -->
+            <tag name="shopware.cart.collector" priority="4500" />
+            <tag name="shopware.cart.processor" priority="4500" />
+        </service>
+        <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Subscriber\LineItemSubscriber" public="true">
+            <argument type="service" id="request_stack"/>
+            <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\ConfigHelper"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+        <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Subscriber\OrderSubscriber" public="true">
+            <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\ApiClient"/>
+            <argument type="service" id="order.repository"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\EntityExtension\Extension\Content\Product\ShirtnetworkProductExtension">
+            <tag name="shopware.entity.extension"/>
+        </service>
+
+        <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\EntityExtension\Subscriber\ProductLoadedSubscriber">
+            <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\SkuMatcher"/>
+            <tag name="kernel.event_subscriber" />
+        </service>
+
+        <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Storefront\Framework\Twig\Extension\DesignerLinkExtension">
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="twig.extension.routing"/>
+            <argument type="service" id="Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface" />
+            <tag name="twig.extension"/>
+        </service>
+
+        <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Checkout\Document\DocumentGenerator\RoutingSlipGenerator">
+            <argument type="service" id="Shopware\Core\Checkout\Document\Twig\DocumentTemplateRenderer"/>
+            <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\ConfigHelper"/>
+            <argument>%kernel.project_dir%</argument>
+
+            <tag name="document.generator"/>
+        </service>
+
+        <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Resources\snippet\de_DE\SnippetFile_de_DE" public="true">
+            <tag name="shopware.snippet.file"/>
+        </service>
+
+        <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Resources\snippet\en_GB\SnippetFile_en_GB" public="true">
+            <tag name="shopware.snippet.file"/>
+        </service>
+    </services>
+</container>

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/platform/master/src/Core/System/SystemConfig/Schema/config.xsd">
+
+    <card>
+        <title>Credentials</title>
+        <title lang="de-DE">Zugangsdaten</title>
+        <input-field>
+            <name>username</name>
+            <label>Benutzername</label>
+            <label lang="de-DE">Username</label>
+        </input-field>
+        <input-field type="password">
+            <name>password</name>
+            <label>Passwort</label>
+            <label lang="de-DE">Password</label>
+        </input-field>
+    </card>
+    <card>
+        <title>Backend</title>
+        <input-field>
+            <name>uploadserver</name>
+            <label>Upload Server</label>
+        </input-field>
+        <input-field>
+            <name>configserver</name>
+            <label>Config Server</label>
+        </input-field>
+        <input-field>
+            <name>epstoolproject</name>
+            <label>EPS Tool Project</label>
+            <label lang="de-DE">EPS Tool Projekt</label>
+        </input-field>
+    </card>
+    <card>
+        <title>Settings</title>
+        <title lang="de-DE">Einstellungen</title>
+        <input-field>
+            <name>defaultsku</name>
+            <label>Default SKU</label>
+            <label lang="de-DE">Start Artikelnummer</label>
+        </input-field>
+        <input-field>
+            <name>skuscheme</name>
+            <label>Sku Scheme</label>
+            <label lang="de-DE">Artikelnummern Schema</label>
+            <defaultValue>{PRODUCT_SKU}-{VARIANT_SKU}-{SIZE_SKU}</defaultValue>
+        </input-field>
+        <input-field>
+            <name>designerversion</name>
+            <label>Designer Version</label>
+        </input-field>
+        <input-field type="single-select">
+            <name>servertype</name>
+            <label>Backend Server Typ</label>
+            <options>
+                <option>
+                    <id>php</id>
+                    <name>PHP</name>
+                </option>
+                <option>
+                    <id>node</id>
+                    <name>NodeJS</name>
+                </option>
+            </options>
+        </input-field>
+        <input-field type="single-select">
+            <name>printtypemode</name>
+            <label>Druckart Modus</label>
+            <options>
+                <option>
+                    <id>object</id>
+                    <name>Objekt</name>
+                </option>
+                <option>
+                    <id>view</id>
+                    <name>Ansicht</name>
+                </option>
+                <option>
+                    <id>product</id>
+                    <name>Produkt</name>
+                </option>
+            </options>
+        </input-field>
+        <input-field type="single-select">
+            <name>amountmode</name>
+            <label>Anzahl Modus</label>
+            <options>
+                <option>
+                    <id>single</id>
+                    <name>Einzeln</name>
+                </option>
+                <option>
+                    <id>accumulated</id>
+                    <name>Aggregiert</name>
+                </option>
+            </options>
+        </input-field>
+        <input-field type="checkbox">
+            <name>constraints</name>
+            <label>Druckbereich begrenzen</label>
+        </input-field>
+        <input-field type="checkbox">
+            <name>showrealsizes</name>
+            <label>Echtgrößen anzeigen</label>
+        </input-field>
+        <input-field type="checkbox">
+            <name>loadcss</name>
+            <label>CSS laden</label>
+        </input-field>
+        <input-field type="checkbox">
+            <name>debug</name>
+            <label>Debug Modus</label>
+        </input-field>
+    </card>
+    <card>
+        <title>Matcher</title>
+        <input-field type="textarea">
+            <name>productskumatcher</name>
+            <label>Produkt</label>
+        </input-field>
+        <input-field type="textarea">
+            <name>variantskumatcher</name>
+            <label>Variante</label>
+        </input-field>
+        <input-field type="textarea">
+            <name>sizeskumatcher</name>
+            <label>Größe</label>
+        </input-field>
+    </card>
+    <card>
+        <title>SEO</title>
+        <component name="landing-page-entity-single-select">
+            <name>landingpage</name>
+            <entity>landing_page</entity>
+            <label>Landing Page</label>
+            <label lang="de-DE">Landing Page</label>
+        </component>
+        <input-field>
+            <name>seourl</name>
+            <label>SEO Url</label>
+        </input-field>
+        <input-field>
+            <name>metatitle</name>
+            <label>Meta Title</label>
+            <label lang="de-DE">Meta Titel</label>
+        </input-field>
+        <input-field type="textarea">
+            <name>metadescription</name>
+            <label>Meta Description</label>
+            <label lang="de-DE">Meta Beschreibung</label>
+        </input-field>
+    </card>
+    <card>
+        <title>Synchronization</title>
+        <title lang="de-DE">Synchronisation</title>
+        <input-field type="bool">
+            <name>syncvariantexpressionforlistings</name>
+            <label>Show variants in listings</label>
+            <label>Varianten in Artikellisten zeigen</label>
+        </input-field>
+        <component name="sw-entity-single-select">
+            <name>syncvariantpropertygroup</name>
+            <entity>property_group</entity>
+            <label>Property for variants</label>
+            <label lang="de-DE">Eigenschaft für Varianten</label>
+            <placeholder>e.g. color</placeholder>
+            <placeholder lang="de-DE">z.B. Farbe</placeholder>
+        </component>
+        <component name="sw-entity-single-select">
+            <name>syncsizepropertygroup</name>
+            <entity>property_group</entity>
+            <label>Property for sizes</label>
+            <label lang="de-DE">Eigenschaft für Größen</label>
+            <placeholder>e.g. size</placeholder>
+            <placeholder lang="de-DE">z.B. Größe</placeholder>
+        </component>
+        <component name="sw-entity-single-select">
+            <name>synctax</name>
+            <entity>tax</entity>
+            <label>Tax</label>
+            <label lang="de-DE">Steuersatz</label>
+        </component>
+        <component name="sw-entity-multi-id-select">
+            <name>syncsaleschannels</name>
+            <entity>sales_channel</entity>
+            <label>Sales Channels</label>
+            <label lang="de-DE">Verkaufskanäle</label>
+        </component>
+    </card>
+</config>
