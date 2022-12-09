@@ -87,6 +87,7 @@ export default class ShirtnetworkPlugin extends Plugin {
                         "id",
                         "productNumber",
                         "availableStock",
+                        "isCloseout",
                         "extensions",
                         "shirtnetwork_sku"
                     ]
@@ -104,7 +105,7 @@ export default class ShirtnetworkPlugin extends Plugin {
                 const stockInfo = children.map(child => {
                     const size = child.extensions.shirtnetwork_sku.sartnr
                     const variant = child.extensions.shirtnetwork_sku.vartnr
-                    const stock = child.availableStock
+                    const stock = child.isCloseout ? child.availableStock : 999999
                     return {
                         size, variant, stock
                     }
