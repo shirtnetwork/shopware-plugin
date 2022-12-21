@@ -20,7 +20,7 @@ export default class ShirtnetworkPlugin extends Plugin {
     init() {
         PageLoadingIndicatorUtil.create();
         this._httpClient = new HttpClient();
-        this.client = new AsyncClient()
+        this.client = new AsyncClient(this.options.swToken, this.options.swAccessKey)
         this.cartItems = []
         this.cache = {}
         this.skuScheme = this.options.skuScheme || '{PRODUCT_SKU}-{VARIANT_SKU}-{SIZE_SKU}'

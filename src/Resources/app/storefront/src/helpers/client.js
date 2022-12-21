@@ -2,8 +2,15 @@ import HttpClient from 'src/service/http-client.service';
 
 export default class AsyncClient {
 
-    constructor() {
+    constructor(token, accessKey) {
         this.client = new HttpClient();
+        const createPreparedRequest = this.client._createPreparedRequest.bind(this.client);
+        this.client._createPreparedRequest = function (type, url, contentType) {
+            const request = createPreparedRequest(type, url, contentType);
+            request.setRequestHeader('sw-access-key', accessKey);
+            request.setRequestHeader('sw-context-token', token);
+            return request;
+        }
     }
 
     async post(url, data){

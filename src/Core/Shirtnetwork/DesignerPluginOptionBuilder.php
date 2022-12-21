@@ -37,6 +37,8 @@ class DesignerPluginOptionBuilder
         return [
             'version' => $this->systemConfigService->get('ShirtnetworkPlugin.config.designerversion', $salesChannelId),
             'skuScheme' => $this->systemConfigService->get('ShirtnetworkPlugin.config.skuscheme', $salesChannelId),
+            'swToken' => $context->getToken(),
+            'swAccessKey' => $context->getSalesChannel()->getAccessKey(),
             'pages' => [
                 'delivery' => $this->router->generate('frontend.cms.page', ['id' => $this->systemConfigService->get('core.basicInformation.shippingPaymentInfoPage', $salesChannelId)])
             ],
