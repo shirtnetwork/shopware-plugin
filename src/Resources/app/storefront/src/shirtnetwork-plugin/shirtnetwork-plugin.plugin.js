@@ -53,7 +53,7 @@ export default class ShirtnetworkPlugin extends Plugin {
             }
         })
 
-        const instance = await ShirtnetworkClient.init(config);
+        const instance = this.instance = await ShirtnetworkClient.init(config);
         instance.$store.dispatch('observe', {event: 'navigate', callback: this.navigate.bind(this)})
         setTimeout(() => PageLoadingIndicatorUtil.remove(), 1500);
     }
@@ -162,6 +162,7 @@ export default class ShirtnetworkPlugin extends Plugin {
           }
         ))
         this.cartItems = []
+        this.instance.$store.dispatch('setIsNavigatingToCart', true)
         this.openOffCanvas()
         return result;
     }
