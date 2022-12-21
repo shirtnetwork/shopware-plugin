@@ -1,9 +1,9 @@
-import StoreApiClient from 'src/service/http-client.service';
+import HttpClient from 'src/service/http-client.service';
 
 export default class AsyncClient {
 
     constructor() {
-        this.client = new StoreApiClient();
+        this.client = new HttpClient();
     }
 
     async post(url, data){
