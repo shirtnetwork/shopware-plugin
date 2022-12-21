@@ -1,4 +1,4 @@
-import StoreApiClient from 'src/service/store-api-client.service';
+import StoreApiClient from 'src/service/http-client.service';
 
 export default class AsyncClient {
 
