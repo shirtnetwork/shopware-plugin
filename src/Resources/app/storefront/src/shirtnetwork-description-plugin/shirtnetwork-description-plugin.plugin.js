@@ -1,6 +1,5 @@
 import Plugin from 'src/plugin-system/plugin.class';
 import HttpClient from 'src/service/http-client.service';
-import PluginManager from 'src/plugin-system/plugin.manager';
 
 export default class ShirtnetworkDescriptionPlugin extends Plugin {
 
@@ -21,7 +20,7 @@ export default class ShirtnetworkDescriptionPlugin extends Plugin {
             document.getElementById('designer-description-description-content').innerHTML = product.translated.description
             this._httpClient.get(`/product/${product.id}/reviews`, response => {
                 document.getElementById('designer-description-reviews-content').innerHTML = response
-                PluginManager.initializePlugins()
+                window.PluginManager.initializePlugins()
             });
         }else{
             document.getElementById('designer-description-description-content').innerHTML = ''

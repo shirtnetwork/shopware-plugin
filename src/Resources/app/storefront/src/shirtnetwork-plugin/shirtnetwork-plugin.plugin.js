@@ -1,5 +1,4 @@
 import Plugin from 'src/plugin-system/plugin.class';
-import PluginManager from 'src/plugin-system/plugin.manager';
 import PseudoModalUtil from 'src/utility/modal-extension/pseudo-modal.util';
 import HttpClient from 'src/service/http-client.service';
 import PageLoadingIndicatorUtil from 'src/utility/loading-indicator/page-loading-indicator.util';
@@ -179,7 +178,7 @@ export default class ShirtnetworkPlugin extends Plugin {
     }
 
     openOffCanvas() {
-        const offCanvasCartInstances = PluginManager.getPluginInstances('OffCanvasCart');
+        const offCanvasCartInstances = window.PluginManager.getPluginInstances('OffCanvasCart');
         for(const inst of offCanvasCartInstances) {
             inst.openOffCanvas(window.router['frontend.cart.offcanvas'], false);
         }
