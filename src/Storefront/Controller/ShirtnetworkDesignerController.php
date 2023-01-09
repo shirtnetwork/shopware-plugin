@@ -81,7 +81,7 @@ class ShirtnetworkDesignerController extends StorefrontController
 
                 $lineItem->setStackable($lineItemData->getBoolean('stackable', true));
                 $lineItem->setRemovable($lineItemData->getBoolean('removable', true));
-                $lineItem->setPayload((array) $lineItemData->get('payload', []));
+                $lineItem->setPayload($lineItemData->get('payload', [])->all());
 
                 $count += $lineItem->getQuantity();
 
