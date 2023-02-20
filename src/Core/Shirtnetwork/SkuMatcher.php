@@ -20,22 +20,41 @@ class SkuMatcher
      */
     private StringTemplateRenderer $stringTemplateRenderer;
 
-    public function __construct (SystemConfigService $systemConfigService, StringTemplateRenderer $stringTemplateRenderer)
+    /**
+     * @var ApiClient $apiClient
+     */
+    private ApiClient $apiClient;
+
+    /**
+     * @param SystemConfigService $systemConfigService
+     * @param StringTemplateRenderer $stringTemplateRenderer
+     */
+    public function __construct (SystemConfigService $systemConfigService, StringTemplateRenderer $stringTemplateRenderer, ApiClient $apiClient)
     {
         $this->systemConfigService = $systemConfigService;
         $this->stringTemplateRenderer = $stringTemplateRenderer;
+        $this->apiClient = $apiClient;
     }
 
     public function match(string $productNumber, Context $context): ArrayEntity {
-        $sizeMatcher = $this->systemConfigService->get('ShirtnetworkPlugin.config.sizeskumatcher', $context->getSource()->getSalesChannelId());
-        $variantMatcher = $this->systemConfigService->get('ShirtnetworkPlugin.config.variantskumatcher', $context->getSource()->getSalesChannelId());
-        $productMatcher = $this->systemConfigService->get('ShirtnetworkPlugin.config.productskumatcher', $context->getSource()->getSalesChannelId());
+
+        $salesChannelId = $context->getSource()->getSalesChannelId();
+        $sizes = $this->apiClient->getSizes($salesChannelId);
+
+        $sizeSkus = array_map(function($size) {
+            return $size->artnr;
+        }, $sizes);
+
+        $sizeMatcher = $this->systemConfigService->get('ShirtnetworkPlugin.config.sizeskumatcher', $salesChannelId);
+        $variantMatcher = $this->systemConfigService->get('ShirtnetworkPlugin.config.variantskumatcher', $salesChannelId);
+        $productMatcher = $this->systemConfigService->get('ShirtnetworkPlugin.config.productskumatcher', $salesChannelId);
 
         $struct = new ArrayEntity([
-            'sartnr' => $sizeMatcher ? $this->stringTemplateRenderer->render($sizeMatcher, ['sku' => $productNumber], $context) : '',
-            'vartnr' => $variantMatcher ? $this->stringTemplateRenderer->render($variantMatcher, ['sku' => $productNumber], $context) : '',
-            'artnr' => $productMatcher ? $this->stringTemplateRenderer->render($productMatcher, ['sku' => $productNumber], $context) : ''
+            'sartnr' => $sizeMatcher ? trim($this->stringTemplateRenderer->render($sizeMatcher, ['sku' => $productNumber, 'sizeSkus' => $sizeSkus], $context)) : '',
+            'vartnr' => $variantMatcher ? trim($this->stringTemplateRenderer->render($variantMatcher, ['sku' => $productNumber, 'sizeSkus' => $sizeSkus], $context)) : '',
+            'artnr' => $productMatcher ? trim($this->stringTemplateRenderer->render($productMatcher, ['sku' => $productNumber, 'sizeSkus' => $sizeSkus], $context)) : ''
         ]);
+
         return $struct;
     }
 
