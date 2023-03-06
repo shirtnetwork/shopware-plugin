@@ -3,11 +3,7 @@
 {% block component_offcanvas_product_image_inner%}
     {% if lineItem.payload.shirtnetwork %}
     <div class="cart-item-img">
-        <a {% if page.extensions.shirtnetworkConfig.landingPage %}
-            href="{{ seoUrl('frontend.landing.page', {'landingPageId': page.extensions.shirtnetworkConfig.landingPage, 'config': lineItem.payload.shirtnetwork }) }}"
-        {% else %}
-            href="{{ seoUrl('frontend.shirtnetwork.designer', {'config': lineItem.payload.shirtnetwork}) }}"
-        {% endif %}
+        <a href="{{ designer_config_link(lineItem.payload.shirtnetwork) }}"
            class="cart-item-img-link"
            title="{{ lineItem.label }}"
         >

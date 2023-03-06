@@ -88,7 +88,7 @@ export default class ShirtnetworkPlugin extends Plugin {
                         "availableStock",
                         "isCloseout",
                         "extensions",
-                        "shirtnetwork_sku"
+                        "shirtnetwork"
                     ]
                 },
                 filter: [{
@@ -102,8 +102,8 @@ export default class ShirtnetworkPlugin extends Plugin {
                 const product = result.elements[0]
                 const children = product.children
                 const stockInfo = children.map(child => {
-                    const size = child.extensions.shirtnetwork_sku.sartnr
-                    const variant = child.extensions.shirtnetwork_sku.vartnr
+                    const size = child.extensions.shirtnetwork.sku.sartnr
+                    const variant = child.extensions.shirtnetwork.sku.vartnr
                     const stock = child.isCloseout ? child.availableStock : 999999
                     return {
                         size, variant, stock

@@ -113,13 +113,13 @@
 
         <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\EntityExtension\Subscriber\ProductLoadedSubscriber">
             <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\SkuMatcher"/>
+            <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\Router"/>
             <tag name="kernel.event_subscriber" />
         </service>
 
         <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Storefront\Framework\Twig\Extension\DesignerLinkExtension">
-            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\Router"/>
             <argument type="service" id="twig.extension.routing"/>
-            <argument type="service" id="Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface" />
             <tag name="twig.extension"/>
         </service>
 
@@ -138,5 +138,11 @@
         <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Resources\snippet\en_GB\SnippetFile_en_GB" public="true">
             <tag name="shopware.snippet.file"/>
         </service>
+
+        <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\Router">
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface" />
+        </service>
+
     </services>
 </container>

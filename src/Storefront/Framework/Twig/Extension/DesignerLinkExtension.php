@@ -2,11 +2,12 @@
 
 namespace Aggrosoft\Shopware\ShirtnetworkPlugin\Storefront\Framework\Twig\Extension;
 
+use Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\Router;
 use Shopware\Core\Content\Product\ProductEntity;
 use Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
+use Shopware\Core\Framework\Struct\ArrayStruct;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SalesChannel\SalesChannelEntity;
-use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Bridge\Twig\Extension\RoutingExtension;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -15,30 +16,22 @@ class DesignerLinkExtension extends AbstractExtension
 {
 
     /**
-     * @var SystemConfigService
+     * @var Router
      */
-    protected $systemConfigService;
+    protected $router;
 
     /**
-     * @var AbstractExtension
+     * @var RoutingExtension
      */
-    private $routingExtension;
+    protected $routingExtension;
 
     /**
-     * @var SeoUrlPlaceholderHandlerInterface
+     * @param Router $router
      */
-    private $seoUrlReplacer;
-
-    /**
-     * @param SystemConfigService $systemConfigService
-     * @param AbstractExtension $routingExtension
-     * @param SeoUrlPlaceholderHandlerInterface $seoUrlReplacer
-     */
-    public function __construct(SystemConfigService $systemConfigService, RoutingExtension $extension, SeoUrlPlaceholderHandlerInterface $seoUrlReplacer)
+    public function __construct(Router $router, RoutingExtension $routingExtension)
     {
-        $this->systemConfigService = $systemConfigService;
-        $this->routingExtension = $extension;
-        $this->seoUrlReplacer = $seoUrlReplacer;
+        $this->router = $router;
+        $this->routingExtension = $routingExtension;
     }
 
     public function getFunctions(): array
@@ -54,46 +47,15 @@ class DesignerLinkExtension extends AbstractExtension
      */
     public function designer_link(array $context, ProductEntity $product = null)
     {
-        $url = $this->getDesignerBaseUrl($context);
-
-        if ($product) {
-            $extension = $product->getExtension('shirtnetwork_sku');
-            if ($extension) {
-                $parameters = array_filter($extension->all(), 'strlen');
-                if (count($parameters))
-                    $url .= '?' . http_build_query($parameters);
-            }
-        }
-
-        return $url;
-
+        return $this->router->getDesignerLink($this->getSalesChannelId($context), $product);
     }
 
     /**
      * @return string
      */
-    public function designer_config_link(array $context, string $config = null)
+    public function designer_config_link(array $context, string $configId = null)
     {
-        $url = $this->getDesignerBaseUrl($context);
-
-        if ($config) {
-            $url .= '?' . http_build_query(['config' => $config]);
-        }
-
-        return $url;
-    }
-
-    private function getDesignerBaseUrl(array $context)
-    {
-        $landingPageId = $this->systemConfigService->get('ShirtnetworkPlugin.config.landingpage', $this->getSalesChannelId($context));
-
-        if ($landingPageId) {
-            $url = $this->seoUrlReplacer->generate('frontend.landing.page', ['landingPageId' => $landingPageId]);
-        }else{
-            $url = $this->seoUrlReplacer->generate('frontend.shirtnetwork.designer');
-        }
-
-        return $url;
+        return $this->router->getDesignerConfigLink($this->getSalesChannelId($context), $configId);
     }
 
     private function getSalesChannelId(array $context): ?string
@@ -113,4 +75,5 @@ class DesignerLinkExtension extends AbstractExtension
 
         return null;
     }
+
 }

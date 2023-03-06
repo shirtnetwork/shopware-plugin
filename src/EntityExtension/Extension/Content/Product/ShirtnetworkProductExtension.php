@@ -14,7 +14,7 @@ class ShirtnetworkProductExtension extends EntityExtension
     public function extendFields(FieldCollection $collection): void
     {
         $collection->add(
-            (new StringField('shirtnetwork_sku', 'shirtnetworkSku'))->addFlags(new Runtime())
+            (new ObjectField('shirtnetwork', 'shirtnetwork'))->addFlags(new Runtime())
         );
     }
 

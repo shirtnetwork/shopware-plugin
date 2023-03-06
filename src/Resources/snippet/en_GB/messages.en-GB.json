@@ -1,22 +1,40 @@
 {
     "shirtnetwork": {
         "detail": {
-            "configureProduct": "Selbst gestalten"
+            "configureProduct": "Create your own"
+        },
+        "config": {
+            "type": {
+                "text": "Text",
+                "logo": "Logo",
+                "upload": "Upload"
+            },
+            "object": {
+                "color": "Color",
+                "size": "Size",
+                "printtype": "Printtype"
+            },
+            "filter": {
+                "removeWhite": "Remove background"
+            },
+            "text": {
+                "font": "Font"
+            }
         }
     },
     "shirtnetwork-order": {
         "details": {
             "objectText": "Text",
-            "objectFills": "Farben",
-            "objectFill": "Farbe",
-            "objectPrinttype": "Druckart",
-            "objectDimensions": "Größe",
-            "objectLogo": "Motiv",
+            "objectFills": "Colors",
+            "objectFill": "Color",
+            "objectPrinttype": "Printtype",
+            "objectDimensions": "Size",
+            "objectLogo": "Logo",
             "objectFile": "Upload",
-            "routingSlipHeadline": "Laufzettel %routingSlipNumber% für Bestellung %orderNumber%",
+            "routingSlipHeadline": "Routing Slip %routingSlipNumber% for order %orderNumber%",
             "objectType": {
                 "text": "Text",
-                "logo": "Motiv",
+                "logo": "Logo",
                 "user-logo": "Upload"
             }
         }

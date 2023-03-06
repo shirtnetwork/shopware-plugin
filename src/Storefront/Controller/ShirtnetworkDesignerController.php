@@ -100,6 +100,17 @@ class ShirtnetworkDesignerController extends StorefrontController
         return $this->createActionResponse($request);
     }
 
+    /**
+     * @Route("/shirtnetwork/resolve-sku", name="frontend.shirtnetwork.designer.resolvesku", methods={"POST"}, defaults={"XmlHttpRequest"=true, "csrf_protected"=false})
+     */
+    public function resolveSku(RequestDataBag $requestDataBag, Request $request, SalesChannelContext $context): Response
+    {
+        /** @var RequestDataBag|null $lineItems */
+        $artnr = $requestDataBag->get('artnr');
+        $vartnr = $requestDataBag->get('vartnr');
+        $sartnr = $requestDataBag->get('sartnr');
+    }
+
     private function traceErrors(Cart $cart): bool
     {
         if ($cart->getErrors()->count() <= 0) {

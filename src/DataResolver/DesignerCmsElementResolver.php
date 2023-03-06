@@ -72,9 +72,9 @@ class DesignerCmsElementResolver extends AbstractCmsElementResolver
 
                 if ($product) {
                     $initialData = [
-                        'product' => $product->getExtension('shirtnetwork_sku')->get('artnr'),
-                        'variant' => $product->getExtension('shirtnetwork_sku')->get('vartnr'),
-                        'size' => $product->getExtension('shirtnetwork_sku')->get('sartnr'),
+                        'product' => $product->getExtension('shirtnetwork')->get('sku')->get('artnr'),
+                        'variant' => $product->getExtension('shirtnetwork')->get('sku')->get('vartnr'),
+                        'size' => $product->getExtension('shirtnetwork')->get('sku')->get('sartnr'),
                     ];
                 }
             }
