@@ -1,0 +1,75 @@
+<!-- eslint-disable-next-line sw-deprecation-rules/no-twigjs-blocks -->
+{% block sw_cms_element_designer_button_config %}
+    <div class="cms-element-designer-button-config">
+        <!-- eslint-disable-next-line sw-deprecation-rules/no-twigjs-blocks -->
+        {% block sw_cms_element_designer_button_warning %}
+            <sw-alert
+                    v-if="isProductPage"
+                    class="sw-cms-el-config-buy-box__warning"
+                    variant="info"
+            >
+                {{ $tc('sw-cms.elements.productDescriptionReviews.infoText.descriptionAndReviewsElement') }}
+            </sw-alert>
+        {% endblock %}
+
+        <!-- eslint-disable-next-line sw-deprecation-rules/no-twigjs-blocks -->
+        {% block sw_cms_element_designer_button_config_product_select %}
+            <sw-entity-single-select
+                    v-if="!isProductPage"
+                    ref="cmsProductSelection"
+                    v-model="element.config.product.value"
+                    entity="product"
+                    :label="$tc('sw-cms.elements.productBox.config.label.selection')"
+                    :placeholder="$tc('sw-cms.elements.productBox.config.placeholder.selection')"
+                    :criteria="productCriteria"
+                    :context="productSelectContext"
+                    show-clearable-button
+                    @change="onProductChange"
+            >
+                <!-- eslint-disable-next-line sw-deprecation-rules/no-twigjs-blocks -->
+                {% block sw_entity_single_select_variant_selected_item %}
+                    <template #selection-label-property="{ item }">
+                        <sw-product-variant-info
+                                :variations="item.variation"
+                        >
+                            {{ item.translated.name || item.name }}
+                        </sw-product-variant-info>
+                    </template>
+                {% endblock %}
+
+                <!-- eslint-disable-next-line sw-deprecation-rules/no-twigjs-blocks -->
+                {% block sw_entity_single_select_variant_result_item %}
+                    <template #result-item="{ item, index }">
+                        <li
+                                is="sw-select-result"
+                                v-bind="{ item, index }"
+                        >
+                            <!-- eslint-disable-next-line sw-deprecation-rules/no-twigjs-blocks -->
+                            {% block sw_entity_single_select_base_results_list_result_label %}
+                                <span class="sw-select-result__result-item-text">
+                                <sw-product-variant-info :variations="item.variation">
+                                    {{ item.translated.name || item.name }}
+                                </sw-product-variant-info>
+                            </span>
+                            {% endblock %}
+                        </li>
+                    </template>
+                {% endblock %}
+            </sw-entity-single-select>
+        {% endblock %}
+        
+        <sw-text-field
+                v-model="buttonLabel"
+                label="Label"
+                placeholder="Enter button label..."
+                @input="onElementUpdate"
+                @change="onElementUpdate">
+        </sw-text-field>
+
+        <sw-text-field
+                v-model="buttonClass"
+                label="CSS Classes"
+                placeholder="Additional Button CSS Classes">
+        </sw-text-field>
+    </div>
+{% endblock %}

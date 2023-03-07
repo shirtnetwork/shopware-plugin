@@ -1,0 +1,16 @@
+.sw-cms-el-designer-button {
+  padding: 10px;
+  &__action {
+    display: block;
+    line-height: 40px;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    background: linear-gradient(180deg,#7793ae 0,#6a849c);
+    border-radius: 4px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}

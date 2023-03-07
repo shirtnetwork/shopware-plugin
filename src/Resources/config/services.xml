@@ -47,6 +47,10 @@
             <tag name="shopware.cms.data_resolver" />
         </service>
 
+        <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\DataResolver\DesignerButtonCmsElementResolver">
+            <tag name="shopware.cms.data_resolver" />
+        </service>
+
         <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\DesignerPluginOptionBuilder" public="true">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="service" id="router"/>

@@ -3,7 +3,7 @@ import './preview'
 
 Shopware.Service('cmsService').registerCmsBlock({
     name: 'designer',
-    category: 'commerce',
+    category: 'shirtnetwork',
     label: 'Shirtnetwork Designer',
     component: 'sw-cms-block-designer',
     previewComponent: 'sw-cms-preview-designer',

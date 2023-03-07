@@ -2,19 +2,19 @@ import './component'
 import './preview'
 
 Shopware.Service('cmsService').registerCmsBlock({
-    name: 'designer-description',
+    name: 'designer-button',
     category: 'shirtnetwork',
-    label: 'Shirtnetwork Designer Produktbeschreibung',
-    component: 'sw-cms-block-designer-description',
-    previewComponent: 'sw-cms-preview-designer-description',
+    label: 'Shirtnetwork Designer Button',
+    component: 'sw-cms-block-designer-button',
+    previewComponent: 'sw-cms-preview-designer-button',
     defaultConfig: {
         marginBottom: '20px',
         marginTop: '20px',
         marginLeft: '20px',
         marginRight: '20px',
-        sizingMode: 'boxed'
+        sizingMode: 'boxed',
     },
     slots: {
-        content: 'designer-description'
+        content: 'designer-button'
     }
 });

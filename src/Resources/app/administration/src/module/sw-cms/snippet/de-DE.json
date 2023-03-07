@@ -3,6 +3,17 @@
     "elements": {
       "customDesignerElement": {
         "label": "Shirtnetwork Designer"
+      },
+      "customDesignerButtonElement": {
+        "label": "Designer Button"
+      },
+      "customDesignerDescriptionElement": {
+        "label": "Shirtnetwork Beschreibung"
+      }
+    },
+    "detail":{
+      "label": {
+        "blockCategoryShirtnetwork": "Shirtnetwork"
       }
     }
   }
