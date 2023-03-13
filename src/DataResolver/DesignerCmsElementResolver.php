@@ -52,17 +52,24 @@ class DesignerCmsElementResolver extends AbstractCmsElementResolver
     {
         $config = $slot->getFieldConfig();
         $productId = $config->get('product')->getValue();
-        $initialData = [];
 
         $request = $this->requestStack->getCurrentRequest();
+        $initialData = array_filter([
+            'logo' => $request->query->get('logo', ''),
+            'text' => $request->query->get('text', ''),
+            'font' => $request->query->get('font', ''),
+            'amount' => $request->query->get('amount', ''),
+            'printtype' => $request->query->get('sartnr', ''),
+            'keep' => $request->query->get('keep', '')
+        ]);
 
         if ($request->get('artnr') || $request->get('config')) {
-            $initialData = [
+            $initialData = array_merge([
                 'product' => $request->get('artnr'),
                 'variant' => $request->get('vartnr'),
                 'size' => $request->get('sartnr'),
                 'config' => $request->get('config')
-            ];
+            ], $initialData);
         }else{
             if ($productId) {
                 $criteria = new Criteria([$productId]);
@@ -71,11 +78,11 @@ class DesignerCmsElementResolver extends AbstractCmsElementResolver
                 $product = $this->productRepository->search($criteria, $resolverContext->getSalesChannelContext()->getContext())->first();
 
                 if ($product) {
-                    $initialData = [
+                    $initialData = array_merge([
                         'product' => $product->getExtension('shirtnetwork')->get('sku')->get('artnr'),
                         'variant' => $product->getExtension('shirtnetwork')->get('sku')->get('vartnr'),
                         'size' => $product->getExtension('shirtnetwork')->get('sku')->get('sartnr'),
-                    ];
+                    ], $initialData);
                 }
             }
         }

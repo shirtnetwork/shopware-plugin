@@ -80,17 +80,6 @@ export default class ShirtnetworkPlugin extends Plugin {
                 associations: {
                     children: {}
                 },
-                includes: {
-                    product: [
-                        "children",
-                        "id",
-                        "productNumber",
-                        "availableStock",
-                        "isCloseout",
-                        "extensions",
-                        "shirtnetwork"
-                    ]
-                },
                 filter: [{
                     "type": "equals",
                     "field": "children.productNumber",

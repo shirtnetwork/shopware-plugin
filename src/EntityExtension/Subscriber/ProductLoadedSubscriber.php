@@ -47,10 +47,11 @@ class ProductLoadedSubscriber implements EventSubscriberInterface
             /** @var ProductEntity $productEntity */
             foreach ($event->getEntities() as $productEntity) {
                 $skuExtension = $this->getShirtnetwork($productEntity, $event->getContext());
-                $productEntity->addExtension('shirtnetwork', new ArrayStruct([
+                $productEntity->addArrayExtension('shirtnetwork', [
                     'sku' => $skuExtension,
                     'url' => $this->router->getDesignerLink($event->getContext()->getSource()->getSalesChannelId(), $skuExtension)
-                ]));
+                ]);
+                //$productEntity->addArrayExtension('foo', ['bar' => 'baz']);
             }
         }
     }
