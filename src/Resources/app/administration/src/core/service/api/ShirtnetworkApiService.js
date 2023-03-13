@@ -32,6 +32,21 @@ class ShirtnetworkApiService  extends Shopware.Classes.ApiService
         });
     }
 
+    getLogoCategories(salesChannelId) {
+        const apiRoute = `${this.getApiBasePath()}/getlogocategories/`+(salesChannelId || '')
+        return this.getRequest(apiRoute)
+    }
+
+    getLogoById(logoId) {
+        const apiRoute = `${this.getApiBasePath()}/getlogo/`+(logoId || '')
+        return this.getRequest(apiRoute)
+    }
+
+    searchLogos(query,salesChannelId) {
+        const apiRoute = `${this.getApiBasePath()}/searchlogos`+'/'+(salesChannelId || '')+'/'+query
+        return this.getRequest(apiRoute)
+    }
+
     getRequest(apiRoute) {
         return this.httpClient.get(
             apiRoute,

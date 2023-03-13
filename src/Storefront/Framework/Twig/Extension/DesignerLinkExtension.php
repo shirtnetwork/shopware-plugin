@@ -38,7 +38,8 @@ class DesignerLinkExtension extends AbstractExtension
     {
         return [
             new TwigFunction('designer_link', [$this, 'designer_link'], ['needs_context' => true, 'is_safe_callback' => [$this->routingExtension, 'isUrlGenerationSafe']]),
-            new TwigFunction('designer_config_link', [$this, 'designer_config_link'], ['needs_context' => true, 'is_safe_callback' => [$this->routingExtension, 'isUrlGenerationSafe']])
+            new TwigFunction('designer_config_link', [$this, 'designer_config_link'], ['needs_context' => true, 'is_safe_callback' => [$this->routingExtension, 'isUrlGenerationSafe']]),
+            new TwigFunction('designer_logo_link', [$this, 'designer_logo_link'], ['needs_context' => true, 'is_safe_callback' => [$this->routingExtension, 'isUrlGenerationSafe']])
         ];
     }
 
@@ -56,6 +57,14 @@ class DesignerLinkExtension extends AbstractExtension
     public function designer_config_link(array $context, string $configId = null)
     {
         return $this->router->getDesignerConfigLink($this->getSalesChannelId($context), $configId);
+    }
+
+    /**
+     * @return string
+     */
+    public function designer_logo_link(array $context, string $logoId = null)
+    {
+        return $this->router->getDesignerLogoLink($this->getSalesChannelId($context), $logoId);
     }
 
     private function getSalesChannelId(array $context): ?string

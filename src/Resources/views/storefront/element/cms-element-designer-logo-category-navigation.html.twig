@@ -1,0 +1,15 @@
+{% block element_designer_logo_category_navigation %}
+    {% set categories = element.data.categories %}
+    {% set activeCategory = element.data.activeCategory %}
+    <div class="cms-element-designer-logo-category-navigation">
+        <div class="designer-logo-category-navigation-box">
+            <ul class="designer-logo-category-navigation-list category-navigation level-0">
+                {% for category in categories %}
+                    <li class="designer-logo-category-navigation-entry category-navigation-entry">
+                        <a href="#" class="designer-logo-category-navigation-link category-navigation-link {% if activeCategory == category.id  %}is-active{% endif %}">{{ category.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

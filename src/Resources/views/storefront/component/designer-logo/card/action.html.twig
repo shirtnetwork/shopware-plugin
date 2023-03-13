@@ -1,0 +1,14 @@
+{% block component_designer_logo_box_action_inner %}
+    {% set id = logo.id %}
+    <div class="designer-logo-action">
+        {% block component_designer_logo_box_action_detail %}
+            <div class="d-grid">
+                <a href="{{ designer_logo_link(id) }}"
+                   class="btn btn-block btn-buy"
+                   title="{{ "listing.boxDesignerLogoDetails"|trans|striptags }}">
+                    {{ "listing.boxDesignerLogoDetails"|trans|sw_sanitize }}
+                </a>
+            </div>
+        {% endblock %}
+    </div>
+{% endblock %}

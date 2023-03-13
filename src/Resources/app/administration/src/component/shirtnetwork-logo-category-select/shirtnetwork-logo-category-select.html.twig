@@ -1,0 +1,18 @@
+{% block shirtnetwork_logo_category_select %}
+<div class="shirtnetwork-logo-category-select">
+    <sw-sales-channel-switch
+        :label="$tc('sw-seo-url.labelSalesChannelSelect')"
+        @change-sales-channel-id="onSalesChannelChanged"
+    />
+    <sw-single-select
+        v-model="selectedCategory"
+        :label="$tc('sw-seo-url.labelCategorySelect')"
+        :placeholder="$tc('sw-seo-url.placeholderCategorySelect')"
+        :options="categoryOptions"
+        :disabled="!currentSalesChannelId"
+        labelProperty="name"
+        valueProperty="id"
+        @change="onCategoryChanged"
+        />
+</div>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% block component_designer_logo_box %}
+    {% if logo %}
+        {% set name = logo.name %}
+        {% set id = logo.id %}
+
+        <div class="card designer-logo-box box-{{ layout }}">
+            {% block component_designer_logo_box_content %}
+                <div class="card-body">
+
+                    {% block component_designer_logo_box_image %}
+                        <div class="designer-logo-image-wrapper">
+                            {# fallback if display mode is not set #}
+                            {% set displayMode = displayMode ?: 'standard' %}
+
+                            {# set display mode 'cover' for box-image with standard display mode #}
+                            {% if layout == 'image' and displayMode == 'standard' %}
+                                {% set displayMode = 'cover' %}
+                            {% endif %}
+
+                            {% block component_designer_logo_box_image_link %}
+                                <a href="{{ designer_logo_link(id) }}"
+                                   title="{{ name }}"
+                                   class="designer-logo-image-link is-{{ displayMode }}">
+                                    {% block component_designer_logo_box_image_link_inner %}
+                                        <img
+                                                src="//api.shirtnetwork.de/out/logos/{{ supplier }}/{{ logo.svg ? logo.svg : logo.picture }}"
+                                                class="designer-logo-image is-{{ displayMode }}"
+                                                alt="{{ name }}"
+                                                title="{{ name }}"
+                                                loading="lazy"
+                                                {% if displayMode == 'cover' or displayMode == 'contain' %}
+                                                    data-object-fit="{{ displayMode }}"
+                                                {% endif %}
+                                        />
+                                    {% endblock %}
+                                </a>
+                            {% endblock %}
+                        </div>
+                    {% endblock %}
+
+                    {% block component_designer_logo_box_info %}
+                        <div class="designer-logo-info">
+                            {% block component_designer_logo_box_name %}
+                                <a href="{{ designer_logo_link(id) }}"
+                                   class="designer-logo-name"
+                                   title="{{ name }}">
+                                    {{ name }}
+                                </a>
+                            {% endblock %}
+
+                            {#
+                            {% block component_designer_logo_box_description %}
+                                <div class="product-description">
+                                    {{ product.translated.description|striptags|raw }}
+                                </div>
+                            {% endblock %}
+
+                            {% block component_designer_logo_box_price %}
+                                {% sw_include '@Storefront/storefront/component/product/card/price-unit.html.twig' %}
+                            {% endblock %}
+
+                            #}
+
+                            {% block component_designer_logo_box_action %}
+                                {% sw_include '@Storefront/storefront/component/designer-logo/card/action.html.twig' %}
+                            {% endblock %}
+                        </div>
+                    {% endblock %}
+                </div>
+            {% endblock %}
+        </div>
+    {% endif %}
+{% endblock %}

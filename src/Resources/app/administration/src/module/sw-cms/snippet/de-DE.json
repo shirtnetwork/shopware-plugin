@@ -2,13 +2,55 @@
   "sw-cms": {
     "elements": {
       "customDesignerElement": {
-        "label": "Shirtnetwork Designer"
+        "label": "Designer App"
       },
       "customDesignerButtonElement": {
         "label": "Designer Button"
       },
       "customDesignerDescriptionElement": {
-        "label": "Shirtnetwork Beschreibung"
+        "label": "Designer Artikelbeschreibung"
+      },
+      "customDesignerLogoCategoryNavigationElement": {
+        "label": "Motivkategorien"
+      },
+      "designerLogoCategoryNavigation": {
+        "label": "Motivkategorien",
+        "component": {
+          "label": {
+            "navigation": "Motivkategorien"
+          }
+        },
+        "preview": {
+          "label": {
+            "navigation": "Motivkategorien"
+          }
+        }
+      },
+      "designerLogo": {
+        "component": {
+          "label": {
+            "designNow": "Jetzt gestalten"
+          }
+        }
+      }
+    },
+    "blocks": {
+      "shirtnetwork": {
+        "designer": {
+          "label": "Designer App"
+        },
+        "designerDescription": {
+          "label": "Artikelbeschreibung"
+        },
+        "designerButton": {
+          "label": "Gestalten Button"
+        },
+        "designerLogoCategoryNavigation": {
+          "label": "Motivkategorien",
+          "preview": {
+            "label": "Motivkategorien"
+          }
+        }
       }
     },
     "detail":{

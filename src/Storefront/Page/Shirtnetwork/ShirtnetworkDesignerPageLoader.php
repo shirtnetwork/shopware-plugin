@@ -40,7 +40,7 @@ class ShirtnetworkDesignerPageLoader
         $page = $this->genericPageLoader->load($request, $context);
         $page = ShirtnetworkDesignerPage::createFrom($page);
 
-        $page->setShirtnetworkPluginOptions($this->pluginOptionBuilder->build($context, [
+        $initialData = array_filter([
             'config' => $request->query->get('config', ''),
             'product' => $request->query->get('artnr', ''),
             'variant' => $request->query->get('vartnr', ''),
@@ -49,8 +49,11 @@ class ShirtnetworkDesignerPageLoader
             'text' => $request->query->get('text', ''),
             'font' => $request->query->get('font', ''),
             'amount' => $request->query->get('amount', ''),
-            'printtype' => $request->query->get('sartnr', '')
-        ]));
+            'printtype' => $request->query->get('sartnr', ''),
+            'keep' => $request->query->get('keep', '')
+        ]);
+
+        $page->setShirtnetworkPluginOptions($this->pluginOptionBuilder->build($context, $initialData));
 
         $this->eventDispatcher->dispatch(
             new ShirtnetworkDesignerPageLoadedEvent($page, $context, $request)

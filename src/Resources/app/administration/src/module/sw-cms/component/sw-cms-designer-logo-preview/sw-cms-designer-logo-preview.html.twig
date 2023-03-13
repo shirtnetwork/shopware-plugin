@@ -1,0 +1,21 @@
+{% block sw_cms_designer_logo_preview %}
+<div
+    class="sw-cms-designer-logo-preview"
+    :class="{ 'has--text': !hideText }"
+>
+
+    <div class="sw-cms-designer-logo-preview__image">
+        <img :src="'shirtnetworkplugin/static/img/background_designer_logo_preview.jpg' | asset">
+    </div>
+
+    <div v-if="!hideText">
+        <div class="sw-cms-designer-logo-preview__name">
+            Lorem Ipsum
+        </div>
+    </div>
+
+    <div class="sw-cms-designer-logo-preview__action">
+        Use design
+    </div>
+</div>
+{% endblock %}

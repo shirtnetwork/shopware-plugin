@@ -6,3 +6,111 @@
     display: none;
   }
 }
+
+.designer-logo-image-wrapper {
+  height: 200px;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -ms-flex-preferred-size: 180px;
+  flex-basis: 180px;
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.designer-logo-image-link {
+  width: 100%;
+  height: 100%;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.cms-element-designer-logo-listing .cms-listing-col {
+  margin-bottom: 1.5rem;
+}
+
+.cms-element-designer-logo-listing-actions {
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.cms-element-designer-logo-listing-actions .sorting {
+  margin-left: auto;
+}
+
+.cms-element-designer-logo-box {
+  width: 100%;
+}
+
+
+.designer-logo-box {
+  border-color: #bcc1c7;
+  background-color: #fff;
+}
+
+.designer-logo-box .card-body {
+  padding: 1rem;
+}
+
+.designer-logo-name {
+  font-weight: 600;
+  color: #4a545b;
+  display: block;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  height: 44px;
+  margin-bottom: 10px;
+  font-size: 18px;
+  line-height: 22px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-decoration: none;
+}
+
+.designer-logo-price {
+  color: #4a545b;
+}
+
+
+.designer-logo-image-link.is-cover {
+  -ms-flex-align: start;
+  align-items: flex-start;
+}
+
+.designer-logo-image {
+  display: block;
+  max-width: 100%;
+  max-height: 200px;
+}
+
+.designer-logo-image.is-standard, .designer-logo-image.is-cover, .designer-logo-image.is-contain {
+  width: 100%;
+  height: 100%;
+}
+
+.designer-logo-image.is-cover {
+  object-fit: cover;
+  font-family: "object-fit: cover;";
+}
+
+.designer-logo-image.is-contain {
+  object-fit: contain;
+  font-family: "object-fit: contain;";
+}
+
+.designer-logo-image.is-standard {
+  object-fit: scale-down;
+  font-family: "object-fit: scale-down;";
+}

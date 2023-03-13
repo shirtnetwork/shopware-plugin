@@ -107,4 +107,31 @@ class ShirtnetworkApiController extends AbstractController
         $log = $this->productSyncer->syncProducts(SyncSettings::fromArray($data),$salesChannelId, $context);
         return new JsonResponse($log);
     }
+
+    /**
+     * @Route("/api/shirtnetwork/searchlogos/{salesChannelId}/{query}", name="api.action.shirtnetwork.searchlogos", methods={"GET"})
+     */
+    public function searchLogos(string $salesChannelId = '', string $query = '', Context $context, Request $request)
+    {
+        $logos = $this->apiClient->getLogosBySearchTerm($salesChannelId, $query);
+        return new JsonResponse($logos);
+    }
+
+    /**
+     * @Route("/api/shirtnetwork/getlogo/{logoId}", name="api.action.shirtnetwork.getlogo", methods={"GET"})
+     */
+    public function getLogo(string $logoId = '', Context $context, Request $request)
+    {
+        $logo = $this->apiClient->getRest('logo/'.$logoId);
+        return new JsonResponse($logo);
+    }
+
+    /**
+     * @Route("/api/shirtnetwork/getlogocategories/{salesChannelId}", name="api.action.shirtnetwork.getlogocategories", methods={"GET"})
+     */
+    public function getLogoCategories(string $salesChannelId, Context $context, Request $request)
+    {
+        $categories = $this->apiClient->getLogoCategories($salesChannelId);
+        return new JsonResponse($categories);
+    }
 }

@@ -62,6 +62,17 @@ class Router
         return $url;
     }
 
+    public function getDesignerLogoLink(string $salesChannelId, string $logoId = null)
+    {
+        $url = $this->getDesignerBaseUrl($salesChannelId);
+
+        if ($logoId) {
+            $url .= '?' . http_build_query(['logo' => $logoId, 'keep' => 1]);
+        }
+
+        return $url;
+    }
+
     private function getDesignerBaseUrl(string $salesChannelId)
     {
         $landingPageId = $this->systemConfigService->get('ShirtnetworkPlugin.config.landingpage', $salesChannelId);

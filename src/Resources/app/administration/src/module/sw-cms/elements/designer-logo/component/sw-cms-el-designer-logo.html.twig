@@ -1,0 +1,86 @@
+{% block sw_cms_element_designer_logo %}
+<div
+    v-if="logo"
+    class="sw-cms-el-designer-logo"
+    :class="`box-${element.config.boxLayout.value}`"
+>
+
+    {% block sw_cms_element_designer_logo_content %}
+    <div
+        class="sw-cms-el-designer-logo__content"
+        :style="verticalAlignStyle"
+    >
+
+        {% block sw_cms_element_designer_logo_media %}
+        <div class="sw-cms-el-designer-logo__media">
+            <a
+                href="#"
+                class="sw-cms-el-designer-logo__image-link"
+            >
+                <img
+                    class="sw-cms-el-designer-logo__image"
+                    :class="displayModeClass"
+                    :src="mediaUrl"
+                >
+            </a>
+        </div>
+        {% endblock %}
+
+        {% block sw_cms_element_designer_logo_info_skeleton %}
+        <div
+            v-if="displaySkeleton"
+            class="sw-cms-el-designer-logo__info"
+        >
+
+            {% block sw_cms_element_designer_logo_name_skeleton %}
+            <div class="sw-cms-el-designer-logo__skeleton-name"></div>
+            {% endblock %}
+
+            {% block sw_cms_element_designer_logo_actions_skeleton %}
+            <div class="sw-cms-el-designer-logo__actions">
+                <a
+                    href="#"
+                    class="sw-cms-el-designer-logo__buy-action"
+                >
+                    {{ $tc('sw-cms.elements.designerLogo.component.label.designNow') }}
+                </a>
+            </div>
+            {% endblock %}
+
+        </div>
+        {% endblock %}
+
+        {% block sw_cms_element_designer_logo_info %}
+        <div
+            v-else
+            class="sw-cms-el-designer-logo__info"
+        >
+
+            {% block sw_cms_element_designer_logo_name %}
+            <a
+                href="#"
+                class="sw-cms-el-designer-logo__name"
+            >
+                {{ logo.name }}
+            </a>
+            {% endblock %}
+
+            {% block sw_cms_element_designer_logo_actions %}
+            <div class="sw-cms-el-designer-logo__actions">
+                <a
+                    href="#"
+                    class="sw-cms-el-designer-logo__buy-action"
+                >
+                    {{ $tc('sw-cms.elements.designerLogo.component.label.designNow') }}
+                </a>
+            </div>
+            {% endblock %}
+
+        </div>
+        {% endblock %}
+
+    </div>
+    {% endblock %}
+
+</div>
+{% endblock %}

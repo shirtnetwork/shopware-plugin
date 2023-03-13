@@ -47,6 +47,12 @@
             <tag name="shopware.cms.data_resolver" />
         </service>
 
+        <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\DataResolver\DesignerLogoListingCmsElementResolver">
+            <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\ApiClient"/>
+            <argument type="service" id="category.repository"/>
+            <tag name="shopware.cms.data_resolver" />
+        </service>
+
         <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\DataResolver\DesignerButtonCmsElementResolver">
             <tag name="shopware.cms.data_resolver" />
         </service>
