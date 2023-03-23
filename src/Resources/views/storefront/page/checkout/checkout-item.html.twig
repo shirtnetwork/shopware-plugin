@@ -21,13 +21,13 @@
     >
         {{ lineItem.label|u.truncate(60) }}
     </a>
+        <br/>
 <button class="btn btn-secondary btn-sm"
         type="button"
         data-toggle="modal"
         data-url="{{ seoUrl('frontend.shirtnetwork.config', {config: lineItem.payload.shirtnetwork}) }}">
     Gestaltungs Details
 </button>
-
 {% else %}
         {{ parent() }}
     {% endif %}

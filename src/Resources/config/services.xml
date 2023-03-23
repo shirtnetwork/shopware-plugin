@@ -133,6 +133,14 @@
             <tag name="twig.extension"/>
         </service>
 
+        <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Storefront\Framework\Twig\Extension\DesignerConfigExtension">
+            <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\ConfigHelper"/>
+            <call method="setTwig">
+                <argument type="service" id="twig"/>
+            </call>
+            <tag name="twig.extension"/>
+        </service>
+
         <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Checkout\Document\DocumentGenerator\RoutingSlipGenerator">
             <argument type="service" id="Shopware\Core\Checkout\Document\Twig\DocumentTemplateRenderer"/>
             <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\ConfigHelper"/>
