@@ -3,9 +3,9 @@
 namespace Aggrosoft\Shopware\ShirtnetworkPlugin\Storefront\Framework\Twig\Extension;
 
 use Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\ConfigHelper;
-use Shopware\Core\Framework\Adapter\Twig\TwigEnvironment;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SalesChannel\SalesChannelEntity;
+use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -13,14 +13,14 @@ class DesignerConfigExtension extends AbstractExtension
 {
 
     private ConfigHelper $configHelper;
-    private TwigEnvironment $twig;
+    private Environment $twig;
 
     public function __construct(ConfigHelper $configHelper)
     {
         $this->configHelper = $configHelper;
     }
 
-    public function setTwig(TwigEnvironment $twig): void
+    public function setTwig(Environment $twig): void
     {
         $this->twig = $twig;
     }

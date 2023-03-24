@@ -15,10 +15,9 @@ export default class ShirtnetworkDescriptionPlugin extends Plugin {
 
     async reloadDescription(){
         const product = this.instance.$store.getters.localVar('shopProductInfos')
-        console.log('reloadDescription', product.id)
         if (product && product.translated) {
             document.getElementById('designer-description-description-content').innerHTML = product.translated.description
-            this._httpClient.get(`/product/${product.id}/reviews`, response => {
+            this._httpClient.get(`/product/${product.parentId ? product.parentId : product.id}/reviews`, response => {
                 document.getElementById('designer-description-reviews-content').innerHTML = response
                 window.PluginManager.initializePlugins()
             });
