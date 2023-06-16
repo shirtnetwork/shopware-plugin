@@ -102,9 +102,9 @@
             <argument type="service" id="Shopware\Core\Checkout\Cart\Price\QuantityPriceCalculator"/>
             <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\PriceCalculator"/>
 
-            <!-- after product processor -->
-            <tag name="shopware.cart.collector" priority="4500" />
-            <tag name="shopware.cart.processor" priority="4500" />
+            <!-- after product processor, before discount calculation! -->
+            <tag name="shopware.cart.collector" priority="4901" />
+            <tag name="shopware.cart.processor" priority="4901" />
         </service>
         <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Subscriber\LineItemSubscriber" public="true">
             <argument type="service" id="request_stack"/>
