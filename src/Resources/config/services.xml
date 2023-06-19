@@ -11,6 +11,9 @@
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
+            <call method="setTwig">
+                <argument type="service" id="twig"/>
+            </call>
         </service>
         <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Storefront\Page\Shirtnetwork\ShirtnetworkDesignerPageLoader" public="true">
             <argument type="service" id="Shopware\Storefront\Page\GenericPageLoader" />
@@ -22,6 +25,9 @@
             <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Storefront\Page\Shirtnetwork\Config\ShirtnetworkDesignerConfigPageLoader"/>
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
+            </call>
+            <call method="setTwig">
+                <argument type="service" id="twig"/>
             </call>
         </service>
         <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Storefront\Page\Shirtnetwork\Config\ShirtnetworkDesignerConfigPageLoader" public="true">
@@ -102,7 +108,7 @@
             <argument type="service" id="Shopware\Core\Checkout\Cart\Price\QuantityPriceCalculator"/>
             <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\PriceCalculator"/>
 
-            <!-- after product processor, before discount calculation! -->
+            <!-- after product processor -->
             <tag name="shopware.cart.collector" priority="4901" />
             <tag name="shopware.cart.processor" priority="4901" />
         </service>
@@ -142,11 +148,14 @@
         </service>
 
         <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Checkout\Document\DocumentGenerator\RoutingSlipGenerator">
-            <argument type="service" id="Shopware\Core\Checkout\Document\Twig\DocumentTemplateRenderer"/>
+            <argument type="service" id="order.repository"/>
+            <argument type="service" id="Shopware\Core\Checkout\Document\Service\DocumentConfigLoader"/>
             <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\ConfigHelper"/>
+            <argument type="service" id="Shopware\Core\Checkout\Document\Twig\DocumentTemplateRenderer"/>
+            <argument type="service" id="Shopware\Core\System\NumberRange\ValueGenerator\NumberRangeValueGeneratorInterface"/>
             <argument>%kernel.project_dir%</argument>
-
-            <tag name="document.generator"/>
+            <argument type="service" id="Doctrine\DBAL\Connection" />
+            <tag name="document.renderer"/>
         </service>
 
         <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Resources\snippet\de_DE\SnippetFile_de_DE" public="true">

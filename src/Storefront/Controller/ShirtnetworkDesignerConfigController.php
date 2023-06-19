@@ -3,15 +3,14 @@
 namespace Aggrosoft\Shopware\ShirtnetworkPlugin\Storefront\Controller;
 
 use Aggrosoft\Shopware\ShirtnetworkPlugin\Storefront\Page\Shirtnetwork\Config\ShirtnetworkDesignerConfigPageLoader;
-use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
+use Shopware\Core\Framework\Routing\Annotation\RouteScope;
+use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @RouteScope(scopes={"storefront"})
- */
+#[Route(defaults: ['_routeScope' => ['storefront']])]
+#[Package('storefront')]
 class ShirtnetworkDesignerConfigController extends StorefrontController
 {
     /**
@@ -23,11 +22,8 @@ class ShirtnetworkDesignerConfigController extends StorefrontController
     {
         $this->designerConfigPageLoader = $designerConfigPageLoader;
     }
-
-    /**
-     * @Route("/shirtnetwork/config/{config}", name="frontend.shirtnetwork.config", options={"seo"="false"}, methods={"GET"}, defaults={"XmlHttpRequest"=true})
-     */
-    public function index(string $config, Request $request, SalesChannelContext $context)
+    #[Route(path: '/shirtnetwork/config/{config}', name: 'frontend.shirtnetwork.config', options: ['seo' => false], defaults: ['XmlHttpRequest' => true], methods: ['GET'])]
+    public function index(Request $request, SalesChannelContext $context, string $config)
     {
         $page = $this->designerConfigPageLoader->load($config, $request, $context);
 

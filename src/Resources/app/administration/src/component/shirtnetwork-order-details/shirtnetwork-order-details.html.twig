@@ -5,11 +5,11 @@
                           columns="1fr" type="row">
                 <sw-button-group class="shirtnetwork-order-details-print-buttons">
                     <sw-button block :disabled="!epsToolConnected">
-                        <sw-icon name="default-action-circle-download"></sw-icon>
+                        <sw-icon name="regular-circle-download"></sw-icon>
                         {{ $tc('shirtnetwork-order.details.generateFiles') }}
                     </sw-button>
                     <sw-button block @click="checkEpsToolConnection">
-                        <sw-icon name="default-device-dashboard"></sw-icon>
+                        <sw-icon name="regular-dashboard"></sw-icon>
                         {{ $tc('shirtnetwork-order.details.checkConnection') }}
                     </sw-button>
                 </sw-button-group>
@@ -32,7 +32,7 @@
                     </template>
                     <template #actions="{ item }">
                         <sw-context-menu-item :disabled="!item.infos"
-                                              icon="default-eye-open"
+                                              icon="regular-eye"
                                               @click="contextMenuShowDetails(item)"
                                               >
                             {{ $tc('shirtnetwork-order.details.contextMenuShowDetails') }}

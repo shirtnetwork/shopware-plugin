@@ -1,0 +1,16 @@
+{% sw_extends '@Storefront/storefront/component/line-item/element/label.html.twig' %}
+
+{% block component_line_item_label %}
+    {% if lineItem.payload.shirtnetwork %}
+        {% set lineItemLink = designer_config_link(lineItem.payload.shirtnetwork) %}
+    {% endif %}
+    {{ parent() }}
+    {% if lineItem.payload.shirtnetwork %}
+    <button class="btn btn-secondary btn-sm"
+            type="button"
+            data-ajax-modal
+            data-url="{{ seoUrl('frontend.shirtnetwork.config', {config: lineItem.payload.shirtnetwork}) }}">
+        Gestaltungs Details
+    </button>
+    {% endif %}
+{% endblock %}

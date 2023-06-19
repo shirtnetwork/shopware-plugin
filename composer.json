@@ -1,7 +1,7 @@
 {
     "name": "shirtnetwork/designer-shopware",
     "description": "Shirtnetwork Connector for Shopware 6",
-    "version": "1.5.2",
+    "version": "2.0.0",
     "type": "shopware-platform-plugin",
     "license": "proprietary",
     "authors": [
@@ -12,7 +12,7 @@
         }
     ],
     "require": {
-        "shopware/core": "~6.4.11"
+        "shopware/core": "~6.5.0"
     },
     "config": {
         "platform": {

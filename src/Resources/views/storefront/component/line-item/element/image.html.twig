@@ -1,0 +1,16 @@
+{% sw_extends '@Storefront/storefront/component/line-item/element/image.html.twig' %}
+
+{% block component_line_item_image %}
+    {% if lineItem.payload.shirtnetwork %}
+        {% set lineItemLink = designer_config_link(lineItem.payload.shirtnetwork) %}
+    {% endif %}
+    {{ parent() }}
+{% endblock %}
+
+{% block component_line_item_image_thumbnails %}
+    {% if lineItem.payload.shirtnetwork %}
+        <img class="img-fluid line-item-img" alt="{{ (lineItem.cover.translated.alt ?: '') }}" title="{{ (lineItem.cover.translated.title ?: '') }}" src="{{ lineItem.payload.shirtnetworkconfig.views.0.icon }}" loading="lazy" />
+    {% else %}
+        {{ parent() }}
+    {% endif %}
+{% endblock %}

@@ -21,7 +21,7 @@ class ShirtnetworkApiService  extends Shopware.Classes.ApiService
 
 
     syncProducts(payload,salesChannelId) {
-        const apiRoute = `${this.getApiBasePath()}/syncproducts`+'/'+(salesChannelId || '')
+        const apiRoute = (`${this.getApiBasePath()}/syncproducts`+'/'+(salesChannelId || '')).replace(/\/$/, '')
         return this.httpClient.post(
             apiRoute,payload,
             {
