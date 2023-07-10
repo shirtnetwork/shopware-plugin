@@ -20,13 +20,13 @@ class Migration1594801599CreateRoutingSlipDocumentTranslations extends Migration
         $deLanguageId = $this->getLanguageId($connection, 'de-DE');
         $existsQuery = 'SELECT 1 FROM document_type_translation WHERE document_type_id = :document_type_id AND language_id = :language_id';
 
-        $exists = $connection->fetchColumn($existsQuery, ['document_type_id' => $documentId, 'language_id' => $deLanguageId]);
+        $exists = $connection->fetchOne($existsQuery, ['document_type_id' => $documentId, 'language_id' => $deLanguageId]);
         if (!$exists) {
             $connection->insert('document_type_translation', ['document_type_id' => $documentId, 'language_id' => $deLanguageId, 'name' => 'Laufzettel', 'created_at' => (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT)]);
         }
 
         $enLanguageId = $this->getLanguageId($connection, 'en-GB');
-        $exists = $connection->fetchColumn($existsQuery, ['document_type_id' => $documentId, 'language_id' => $enLanguageId]);
+        $exists = $connection->fetchOne($existsQuery, ['document_type_id' => $documentId, 'language_id' => $enLanguageId]);
         if (!$exists) {
             $connection->insert('document_type_translation', ['document_type_id' => $documentId, 'language_id' => $enLanguageId, 'name' => 'Routing Slip', 'created_at' => (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT)]);
         }
@@ -50,7 +50,7 @@ class Migration1594801599CreateRoutingSlipDocumentTranslations extends Migration
             ORDER BY created_at ASC
 SQL;
 
-        return (string) $connection->executeQuery($sql, ['code' => $code])->fetchColumn();
+        return (string) $connection->executeQuery($sql, ['code' => $code])->fetchOne();
     }
 
     private function getDocumentId(Connection $connection): string
@@ -61,6 +61,6 @@ SQL;
             WHERE technical_name = :technical_name
 SQL;
 
-        return (string) $connection->executeQuery($sql, ['technical_name' => 'routing_slip'])->fetchColumn();
+        return (string) $connection->executeQuery($sql, ['technical_name' => 'routing_slip'])->fetchOne();
     }
 }

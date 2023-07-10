@@ -1,26 +1,26 @@
-<div id="snwCarousel{{key}}" class="carousel snwCarousel slide" data-ride="carousel">
+<div id="snwCarousel{{key}}" class="carousel snwCarousel slide mb-5" data-bs-ride="carousel">
     <!-- Indicators -->
-    <ol class="carousel-indicators">
+    <div class="carousel-indicators">
         {% for pic in page.config.views %}
-        <li data-target="#snwCarousel{{key}}" data-slide-to="{{loop.index0}}" {% if loop.first %}class="active"{% endif %} style="min-height: auto;"></li>
+        <button type="button" data-bs-target="#snwCarousel{{key}}" data-bs-slide-to="{{loop.index0}}" {% if loop.first %}class="active" aria-current="true"{% endif %} style="min-height: auto;"></button>
         {% endfor %}
-    </ol>
+    </div>
     <!-- Wrapper for slides -->
-    <div class="carousel-inner" role="listbox">
+    <div class="carousel-inner">
         {% for pic in page.config.views %}
-        <div class="item carousel-item {% if loop.first %}active{% endif %}">
-            <img src="{{pic.picture}}" class="img-responsive img-fluid center-block" style="display:block">
+        <div class="carousel-item {% if loop.first %}active{% endif %}">
+            <img src="{{pic.picture}}" class="d-block w-100" style="display:block">
         </div>
         {% endfor %}
     </div>
-    <a class="carousel-control-prev" href="#snwCarousel{{key}}" role="button" data-slide="prev">
-        <i class="fas fa-arrow-circle-left fa-2x text-primary"></i>
-        <span class="sr-only">Zurück</span>
-    </a>
-    <a class="carousel-control-next" href="#snwCarousel{{key}}" role="button" data-slide="next">
-        <i class="fas fa-arrow-circle-right fa-2x text-primary"></i>
-        <span class="sr-only">Weiter</span>
-    </a>
+    <button class="carousel-control-prev" type="button" data-bs-target="#snwCarousel{{key}}" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Zurück</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#snwCarousel{{key}}" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Weiter</span>
+    </button>
 </div>
 
 {% sw_include '@ShirtnetworkPlugin/storefront/page/checkout/designer-config-objects.html.twig' with { objects: page.config.objects } %}

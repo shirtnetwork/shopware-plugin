@@ -4,7 +4,7 @@ namespace Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork;
 
 use Shopware\Core\Defaults;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
@@ -28,11 +28,11 @@ class ProductSyncer {
     public function __construct(
         ApiClient $apiClient,
         MediaSyncer $mediaSyncer,
-        EntityRepositoryInterface $productRepository,
-        EntityRepositoryInterface $productMediaRepository,
-        EntityRepositoryInterface $visibilityRepository,
-        EntityRepositoryInterface $propertyGroupOptionRepository,
-        EntityRepositoryInterface $taxRepository,
+        EntityRepository $productRepository,
+        EntityRepository $productMediaRepository,
+        EntityRepository $visibilityRepository,
+        EntityRepository $propertyGroupOptionRepository,
+        EntityRepository $taxRepository,
         SystemConfigService $systemConfigService
     )    {
         $this->apiClient = $apiClient;

@@ -10,7 +10,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Content\Media\File\FileFetcher;
 use Shopware\Core\Content\Media\MediaService;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -33,8 +33,8 @@ class MediaSyncer
         FileFetcher $fileFetcher,
         FileSaver $fileSaver,
         FileNameProvider $fileNameProvider,
-        EntityRepositoryInterface $mediaRepository,
-        EntityRepositoryInterface $mediaFolderRepository
+        EntityRepository $mediaRepository,
+        EntityRepository $mediaFolderRepository
     )
     {
         $this->apiClient = $apiClient;

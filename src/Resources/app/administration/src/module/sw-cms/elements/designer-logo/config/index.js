@@ -1,4 +1,4 @@
-import Criteria from 'src/core/data/criteria.data';
+const { Criteria } = Shopware.Data;
 import template from './sw-cms-el-config-designer-logo.html.twig';
 import './sw-cms-el-config-designer-logo.scss';
 

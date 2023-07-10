@@ -16,7 +16,7 @@ class Migration1595499962AddShirtnetworkCustomFieldGroup extends MigrationStep
 
     public function update(Connection $connection): void
     {
-        $exists = $connection->fetchColumn('SELECT 1 FROM custom_field_set WHERE name = :name', ['name' => 'shirtnetwork']);
+        $exists = $connection->fetchOne('SELECT 1 FROM custom_field_set WHERE name = :name', ['name' => 'shirtnetwork']);
         if ($exists !== false) {
             return;
         }

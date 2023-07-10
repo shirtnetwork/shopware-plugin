@@ -34,7 +34,7 @@ export default class ShirtnetworkPlugin extends Plugin {
                 container: this.el.id,
                 shop: {
                     cart: {
-                        link: window.router['frontend.checkout.cart.page'],
+                        link: '/checkout/cart', //window.router['frontend.checkout.cart.page'],
                         data: {},
                         handler: this.getCheckoutData.bind(this),
                         addItem: this.addItemToCart.bind(this),
@@ -133,7 +133,14 @@ export default class ShirtnetworkPlugin extends Plugin {
                     "type": "equals",
                     "field": "productNumber",
                     "value": this.resolveSku(data.psku, data.vsku, data.ssku)
-                }]
+                }],
+                associations: {
+                    properties: {
+                        associations: {
+                            group: {}
+                        }
+                    }
+                }
             }), true))
             console.log('after getProduct', result)
             this.cache[resolvedSku] = result.elements && result.elements.length ? result.elements[0] : {}
