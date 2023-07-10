@@ -17,7 +17,6 @@ export default class ShirtnetworkDescriptionPlugin extends Plugin {
         const product = this.instance.$store.getters.localVar('shopProductInfos')
         if (product && product.translated) {
             document.getElementById('designer-description-description-content').innerHTML = product.translated.description
-
             this._httpClient.get(`/product/${product.parentId ? product.parentId : product.id}/reviews`, response => {
                 document.getElementById('designer-description-reviews-content').innerHTML = response
                 window.PluginManager.initializePlugins()
