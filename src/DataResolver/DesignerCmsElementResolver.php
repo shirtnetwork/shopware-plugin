@@ -9,7 +9,7 @@ use Shopware\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
 use Shopware\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
 use Shopware\Core\Content\Cms\DataResolver\CriteriaCollection;
 use Shopware\Core\Content\Product\ProductEntity;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\Struct\ArrayStruct;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class DesignerCmsElementResolver extends AbstractCmsElementResolver
 {
     /**
-     * @var EntityRepository
+     * @var EntityRepositoryInterface
      */
     protected $productRepository;
 
@@ -31,7 +31,7 @@ class DesignerCmsElementResolver extends AbstractCmsElementResolver
      */
     protected $requestStack;
 
-    public function __construct(EntityRepository $productRepository, DesignerPluginOptionBuilder $designerPluginOptionBuilder, RequestStack $requestStack)
+    public function __construct(EntityRepositoryInterface $productRepository, DesignerPluginOptionBuilder $designerPluginOptionBuilder, RequestStack $requestStack)
     {
         $this->productRepository = $productRepository;
         $this->designerPluginOptionBuilder = $designerPluginOptionBuilder;

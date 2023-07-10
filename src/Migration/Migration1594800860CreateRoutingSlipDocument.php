@@ -17,7 +17,7 @@ class Migration1594800860CreateRoutingSlipDocument extends MigrationStep
     public function update(Connection $connection): void
     {
         $id = Uuid::randomBytes();
-        $exists = $connection->fetchOne('SELECT 1 FROM document_type WHERE technical_name = :technical_name', ['technical_name' => 'routing_slip']);
+        $exists = $connection->fetchColumn('SELECT 1 FROM document_type WHERE technical_name = :technical_name', ['technical_name' => 'routing_slip']);
         if ($exists !== false) {
             return;
         }

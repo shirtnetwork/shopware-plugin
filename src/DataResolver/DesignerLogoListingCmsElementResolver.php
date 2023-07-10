@@ -10,7 +10,7 @@ use Shopware\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
 use Shopware\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
 use Shopware\Core\Content\Cms\DataResolver\CriteriaCollection;
 use Shopware\Core\Content\Product\ProductEntity;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\Struct\ArrayStruct;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
@@ -25,11 +25,11 @@ class DesignerLogoListingCmsElementResolver extends AbstractCmsElementResolver
     private $apiClient;
 
     /**
-     * @var EntityRepository
+     * @var EntityRepositoryInterface
      */
     private $categoryRepository;
 
-    public function __construct(ApiClient $apiClient, EntityRepository $categoryRepository)
+    public function __construct(ApiClient $apiClient, EntityRepositoryInterface $categoryRepository)
     {
         $this->apiClient = $apiClient;
         $this->categoryRepository = $categoryRepository;

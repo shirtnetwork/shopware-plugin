@@ -34,7 +34,7 @@ export default class ShirtnetworkPlugin extends Plugin {
                 container: this.el.id,
                 shop: {
                     cart: {
-                        link: '/checkout/cart', //window.router['frontend.checkout.cart.page'],
+                        link: window.router['frontend.checkout.cart.page'],
                         data: {},
                         handler: this.getCheckoutData.bind(this),
                         addItem: this.addItemToCart.bind(this),

@@ -16,12 +16,12 @@ class Migration1595499974AddIsShirtnetworkCustomField extends MigrationStep
 
     public function update(Connection $connection): void
     {
-        $exists = $connection->fetchOne('SELECT 1 FROM custom_field WHERE name = :name', ['name' => 'is_shirtnetwork']);
+        $exists = $connection->fetchColumn('SELECT 1 FROM custom_field WHERE name = :name', ['name' => 'is_shirtnetwork']);
         if ($exists !== false) {
             return;
         }
 
-        $set = $connection->fetchOne('SELECT id FROM custom_field_set WHERE name = :name', ['name' => 'shirtnetwork']);
+        $set = $connection->fetchColumn('SELECT id FROM custom_field_set WHERE name = :name', ['name' => 'shirtnetwork']);
         $connection->insert('custom_field', [
             'id' => Uuid::randomBytes(),
             'name' => 'is_shirtnetwork',

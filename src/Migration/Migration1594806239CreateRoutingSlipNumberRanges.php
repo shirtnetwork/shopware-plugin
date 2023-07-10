@@ -16,7 +16,7 @@ class Migration1594806239CreateRoutingSlipNumberRanges extends MigrationStep
 
     public function update(Connection $connection): void
     {
-        $exists = $connection->fetchOne('SELECT 1 FROM number_range_type WHERE technical_name = :technical_name', ['technical_name' => 'document_routing_slip']);
+        $exists = $connection->fetchColumn('SELECT 1 FROM number_range_type WHERE technical_name = :technical_name', ['technical_name' => 'document_routing_slip']);
         if ($exists !== false) {
             return;
         }
@@ -127,6 +127,6 @@ class Migration1594806239CreateRoutingSlipNumberRanges extends MigrationStep
             ORDER BY created_at ASC
 SQL;
 
-        return (string) $connection->executeQuery($sql, ['code' => $code])->fetchOne();
+        return (string) $connection->executeQuery($sql, ['code' => $code])->fetchColumn();
     }
 }

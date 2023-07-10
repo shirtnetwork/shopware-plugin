@@ -1,0 +1,26 @@
+{% sw_extends '@Storefront/storefront/page/account/order-history/order-item.html.twig' %}
+
+{% block page_account_order_item_context_menu_reorder_form_action %}
+    {% apply spaceless %}
+        {% set isShirtnetworkOrder = false %}
+        {% for lineItem in order.lineItems %}
+            {% if lineItem.type == PRODUCT_LINE_ITEM_TYPE and lineItem.payload is defined and lineItem.payload.shirtnetwork %}
+                {% set isShirtnetworkOrder = true %}
+            {% endif %}
+        {% endfor %}
+        {% if isShirtnetworkOrder %}
+            {{ path('frontend.shirtnetwork.designer.cart') }}
+        {% else %}
+            {{ parent() }}
+        {% endif %}
+    {% endapply %}
+{% endblock %}
+
+{% block page_account_order_item_context_menu_reorder_form_line_item_input %}
+    {{ parent() }}
+    {% if lineItem.type == PRODUCT_LINE_ITEM_TYPE  and lineItem.payload is defined and lineItem.payload.shirtnetwork %}
+        <input type="hidden"
+               name="lineItems[{{ lineItem.identifier }}][payload][shirtnetwork]"
+               value="{{ lineItem.payload.shirtnetwork }}">
+    {% endif %}
+{% endblock %}

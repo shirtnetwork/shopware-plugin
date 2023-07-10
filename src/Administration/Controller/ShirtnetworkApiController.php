@@ -7,7 +7,7 @@ use Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\ProductSyncer;
 use Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\SyncSettings;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,8 +16,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\ConfigHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-#[Route(defaults: ['_routeScope' => ['api']])]
-#[Package('administration')]
+/**
+ * @RouteScope(scopes={"api"})
+ */
 class ShirtnetworkApiController extends AbstractController
 {
     /**
@@ -31,7 +32,7 @@ class ShirtnetworkApiController extends AbstractController
     private $apiClient;
 
     /**
-     * @var EntityRepository
+     * @var EntityRepositoryInterface
      */
     private $orderRepository;
 
@@ -40,7 +41,7 @@ class ShirtnetworkApiController extends AbstractController
      */
     private $productSyncer;
 
-    public function __construct(ConfigHelper $configHelper, ApiClient $apiClient, EntityRepository $orderRepository, ProductSyncer $productSyncer)
+    public function __construct(ConfigHelper $configHelper, ApiClient $apiClient, EntityRepositoryInterface $orderRepository, ProductSyncer $productSyncer)
     {
         $this->configHelper = $configHelper;
         $this->apiClient = $apiClient;
@@ -49,7 +50,9 @@ class ShirtnetworkApiController extends AbstractController
 
     }
 
-    #[Route(path: '/api/shirtnetwork/orderconfigs/{order}', name: 'api.action.shirtnetwork.orderconfigs', methods: ['GET'])]
+    /**
+     * @Route("/api/shirtnetwork/orderconfigs/{order}", name="api.action.shirtnetwork.orderconfigs", methods={"GET"})
+     */
     public function getConfigs($order, Context $context, Request $request)
     {
         $criteria = new Criteria([$order]);
@@ -73,8 +76,10 @@ class ShirtnetworkApiController extends AbstractController
 
     }
 
-    #[Route(path: '/api/shirtnetwork/getsyncproducts/{start}/{num}/{salesChannelId}', name: 'api.action.shirtnetwork.getsyncproducts', methods: ['GET'])]
-    public function getSyncProducts(Request $request, $start = 0, $num = 25, $salesChannelId = '')
+    /**
+     * @Route("/api/shirtnetwork/getsyncproducts/{start}/{num}/{salesChannelId}", name="api.action.shirtnetwork.getsyncproducts", methods={"GET"})
+     */
+    public function getSyncProducts($start = 0, $num = 25, $salesChannelId = '', Request $request = null)
     {
         $params = array("oUser" => $this->apiClient->getSOAPUserObject($salesChannelId), "iStart" => $start, "iNumProducts" => $num);
         $products = $this->apiClient->SOAPRequest($salesChannelId, "ProductService", "getUserProducts", $params, false, true);
@@ -82,38 +87,49 @@ class ShirtnetworkApiController extends AbstractController
 
     }
 
-    #[Route(path: '/api/shirtnetwork/countsyncproducts/{salesChannelId}', name: 'api.action.shirtnetwork.countsyncproducts', methods: ['GET'])]
-    public function countSyncProducts(Request $request, $salesChannelId = '')
+    /**
+     * @Route("/api/shirtnetwork/countsyncproducts/{salesChannelId}", name="api.action.shirtnetwork.countsyncproducts", methods={"GET"})
+     */
+    public function countSyncProducts($salesChannelId = '', Request $request = null)
     {
         $params = array("oUser" => $this->apiClient->getSOAPUserObject($salesChannelId));
         $count = $this->apiClient->SOAPRequest($salesChannelId, "ProductService", "getUserProductsCount", $params, false, true);
         return new JsonResponse($count);
     }
 
-    #[Route(path: '/api/shirtnetwork/syncproducts/{salesChannelId}', name: 'api.action.shirtnetwork.syncproducts', methods: ['POST'])]
-    public function syncProducts(Context $context, Request $request, $salesChannelId = '')
+
+    /**
+     * @Route("/api/shirtnetwork/syncproducts/{salesChannelId}", name="api.action.shirtnetwork.syncproducts", methods={"POST"})
+     */
+    public function syncProducts($salesChannelId = '', Context $context, Request $request)
     {
         $data = json_decode($request->getContent(), true);
         $log = $this->productSyncer->syncProducts(SyncSettings::fromArray($data),$salesChannelId, $context);
         return new JsonResponse($log);
     }
 
-    #[Route(path: '/api/shirtnetwork/searchlogos/{salesChannelId}/{query}', name: 'api.action.shirtnetwork.searchlogos', methods: ['GET'])]
-    public function searchLogos(Context $context, Request $request, string $salesChannelId = '', string $query = '')
+    /**
+     * @Route("/api/shirtnetwork/searchlogos/{salesChannelId}/{query}", name="api.action.shirtnetwork.searchlogos", methods={"GET"})
+     */
+    public function searchLogos(string $salesChannelId = '', string $query = '', Context $context, Request $request)
     {
         $logos = $this->apiClient->getLogosBySearchTerm($salesChannelId, $query);
         return new JsonResponse($logos);
     }
 
-    #[Route(path: '/api/shirtnetwork/getlogo/{logoId}', name: 'api.action.shirtnetwork.getlogo', methods: ['GET'])]
-    public function getLogo(Context $context, Request $request, string $logoId)
+    /**
+     * @Route("/api/shirtnetwork/getlogo/{logoId}", name="api.action.shirtnetwork.getlogo", methods={"GET"})
+     */
+    public function getLogo(string $logoId = '', Context $context, Request $request)
     {
         $logo = $this->apiClient->getRest('logo/'.$logoId);
         return new JsonResponse($logo);
     }
 
-    #[Route(path: '/api/shirtnetwork/getlogocategories/{salesChannelId}', name: 'api.action.shirtnetwork.getlogocategories', methods: ['GET'])]
-    public function getLogoCategories(Context $context, Request $request, string $salesChannelId = '')
+    /**
+     * @Route("/api/shirtnetwork/getlogocategories/{salesChannelId}", name="api.action.shirtnetwork.getlogocategories", methods={"GET"})
+     */
+    public function getLogoCategories(string $salesChannelId, Context $context, Request $request)
     {
         $categories = $this->apiClient->getLogoCategories($salesChannelId);
         return new JsonResponse($categories);

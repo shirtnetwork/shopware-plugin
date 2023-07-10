@@ -1,5 +1,5 @@
 import template from './sw-cms-el-config-designer-button.html.twig';
-const { Criteria } = Shopware.Data;
+import Criteria from 'src/core/data/criteria.data';
 
 Shopware.Component.register('sw-cms-el-config-designer-button', {
     template,
