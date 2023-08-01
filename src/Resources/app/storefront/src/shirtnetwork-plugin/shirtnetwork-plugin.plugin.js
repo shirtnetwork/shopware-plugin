@@ -76,30 +76,8 @@ export default class ShirtnetworkPlugin extends Plugin {
         const resolvedSku = this.resolveSku(data.psku, data.vsku, data.ssku)
 
         if (resolvedSku) {
-            const result = JSON.parse(await this.client.post('/store-api/product', JSON.stringify({
-                associations: {
-                    children: {}
-                },
-                filter: [{
-                    "type": "equals",
-                    "field": "children.productNumber",
-                    "value": resolvedSku
-                }]
-            }), true))
-
-            if (result.elements.length) {
-                const product = result.elements[0]
-                const children = product.children
-                const stockInfo = children.map(child => {
-                    const size = child.extensions.shirtnetwork.sku.sartnr
-                    const variant = child.extensions.shirtnetwork.sku.vartnr
-                    const stock = child.isCloseout ? child.availableStock : 999999
-                    return {
-                        size, variant, stock
-                    }
-                })
-                return stockInfo
-            }
+            const result = JSON.parse(await this.client.get('/shirtnetwork/designer-stock-infos/'+resolvedSku))
+            return result ?? []
         }
 
         return []

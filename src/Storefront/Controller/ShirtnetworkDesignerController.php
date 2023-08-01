@@ -8,10 +8,15 @@ use Shopware\Core\Checkout\Cart\LineItem\LineItem;
 use Shopware\Core\Checkout\Cart\Error\Error;
 use Shopware\Core\Checkout\Cart\SalesChannel\CartService;
 use Shopware\Core\Content\Product\Exception\ProductNotFoundException;
+use Shopware\Core\Content\Product\ProductEntity;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\Framework\Routing\Exception\MissingRequestParameterException;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Storefront\Controller\StorefrontController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,10 +37,16 @@ class ShirtnetworkDesignerController extends StorefrontController
      */
     private $cartService;
 
-    public function __construct(ShirtnetworkDesignerPageLoader $designerPageLoader, CartService $cartService)
+    /**
+     * @var EntityRepository
+     */
+    private $productRepository;
+
+    public function __construct(ShirtnetworkDesignerPageLoader $designerPageLoader, CartService $cartService, EntityRepository $productRepository)
     {
         $this->designerPageLoader = $designerPageLoader;
         $this->cartService = $cartService;
+        $this->productRepository = $productRepository;
     }
 
     #[Route(path: '/shirtnetwork/designer', name: 'frontend.shirtnetwork.designer', options: ['seo' => true], methods: ['GET'])]
@@ -93,6 +104,31 @@ class ShirtnetworkDesignerController extends StorefrontController
         }
 
         return $this->createActionResponse($request);
+    }
+
+    #[Route(path: '/shirtnetwork/designer-stock-infos/{productNumber}', name: 'frontend.shirtnetwork.designer.stock', defaults: ['XmlHttpRequest' => true], methods: ['GET'])]
+    public function stockInfos(string $productNumber, Request $request, SalesChannelContext $context)
+    {
+        $stockInfo = [];
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('children.productNumber', $productNumber));
+        $criteria->addAssociation('children');
+        /** @var ProductEntity|null $product */
+        $product = $this->productRepository->search($criteria, $context->getContext())->first();
+
+        if ($product && $product->getChildren()->count() > 0) {
+            $children = $product->getChildren();
+            $stockInfo = $children->map(function(ProductEntity $child){
+                $extension = $child->getExtension('shirtnetwork');
+                return [
+                    'size' => $extension['sku']['sartnr'],
+                    'variant' => $extension['sku']['vartnr'],
+                    'stock' => $child->getIsCloseout() ? $child->getAvailableStock() : 999999
+                ];
+            });
+        }
+
+        return new JsonResponse(array_values($stockInfo));
     }
 
 

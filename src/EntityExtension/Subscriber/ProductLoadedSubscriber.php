@@ -51,7 +51,6 @@ class ProductLoadedSubscriber implements EventSubscriberInterface
                     'sku' => $skuExtension,
                     'url' => $this->router->getDesignerLink($event->getContext()->getSource()->getSalesChannelId(), $skuExtension)
                 ]);
-                //$productEntity->addArrayExtension('foo', ['bar' => 'baz']);
             }
         }
     }
