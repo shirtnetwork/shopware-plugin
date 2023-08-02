@@ -123,7 +123,7 @@ class ShirtnetworkDesignerController extends StorefrontController
                 return [
                     'size' => $extension['sku']['sartnr'],
                     'variant' => $extension['sku']['vartnr'],
-                    'stock' => $child->getIsCloseout() ? $child->getAvailableStock() : 999999
+                    'stock' => $child->getIsCloseout() ? max(0, $child->getAvailableStock()) : 999999
                 ];
             });
         }
