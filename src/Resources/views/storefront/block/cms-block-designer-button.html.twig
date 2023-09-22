@@ -4,12 +4,13 @@
 
     {% block block_designer_button_content %}
         {% set element = block.slots.getSlot('content') %}
-
-        <div class="col-md-12" data-cms-element-id="{{ id }}">
-            {% block block_designer_button_content_inner %}
-                {% sw_include "@Storefront/storefront/element/cms-element-" ~ element.type ~ ".html.twig" ignore missing %}
-            {% endblock %}
-        </div>
+        {% if element.data.product and element.data.product.customFields.is_shirtnetwork %}
+            <div class="col-md-12" data-cms-element-id="{{ id }}">
+                {% block block_designer_button_content_inner %}
+                    {% sw_include "@Storefront/storefront/element/cms-element-" ~ element.type ~ ".html.twig" ignore missing %}
+                {% endblock %}
+            </div>
+        {% endif %}
     {% endblock %}
 
 {% endblock %}
