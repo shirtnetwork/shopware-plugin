@@ -14,6 +14,8 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\Framework\Routing\Exception\MissingRequestParameterException;
+use Shopware\Storefront\Page\Product\ProductPageLoadedHook;
+use Shopware\Storefront\Page\Product\ProductPageLoader;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -42,11 +44,17 @@ class ShirtnetworkDesignerController extends StorefrontController
      */
     private $productRepository;
 
-    public function __construct(ShirtnetworkDesignerPageLoader $designerPageLoader, CartService $cartService, EntityRepository $productRepository)
+    /**
+     * @var ProductPageLoader
+     */
+    private $productPageLoader;
+
+    public function __construct(ShirtnetworkDesignerPageLoader $designerPageLoader, CartService $cartService, EntityRepository $productRepository, ProductPageLoader $productPageLoader)
     {
         $this->designerPageLoader = $designerPageLoader;
         $this->cartService = $cartService;
         $this->productRepository = $productRepository;
+        $this->productPageLoader = $productPageLoader;
     }
 
     #[Route(path: '/shirtnetwork/designer', name: 'frontend.shirtnetwork.designer', options: ['seo' => true], methods: ['GET'])]
@@ -60,6 +68,28 @@ class ShirtnetworkDesignerController extends StorefrontController
                 'page' => $page
             ]
         );
+    }
+
+    #[Route(path: '/shirtnetwork/detail/{productId}', name: 'frontend.shirtnetwork.detail', defaults: ['XmlHttpRequest' => true], methods: ['GET'])]
+    public function detail(SalesChannelContext $context, Request $request): Response
+    {
+        $page = $this->productPageLoader->load($request, $context);
+
+        $this->hook(new ProductPageLoadedHook($page, $context));
+
+        $ratingSuccess = $request->get('success');
+
+        /**
+         * @deprecated tag:v6.6.0 - remove complete if statement, cms page id is always set
+         *
+         * Fallback layout for non-assigned product layout
+        */
+        if (!$page->getCmsPage()) {
+            return $this->renderStorefront('@Storefront/storefront/page/product-detail/index.html.twig', ['page' => $page, 'ratingSuccess' => $ratingSuccess]);
+        }
+
+
+        return $this->renderStorefront('@Storefront/storefront/page/content/product-detail.html.twig', ['page' => $page]);
     }
 
     #[Route(path: '/shirtnetwork/add-to-cart', name: 'frontend.shirtnetwork.designer.cart', defaults: ['XmlHttpRequest' => true], methods: ['POST'])]

@@ -27,7 +27,7 @@
                                                 class="designer-logo-image is-{{ displayMode }}"
                                                 alt="{{ name }}"
                                                 title="{{ name }}"
-                                                loading="lazy"
+                                                loading="{{ loop.index <= 2 ? 'eager' : 'lazy' }}"
                                                 {% if displayMode == 'cover' or displayMode == 'contain' %}
                                                     data-object-fit="{{ displayMode }}"
                                                 {% endif %}

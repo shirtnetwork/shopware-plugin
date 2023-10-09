@@ -9,6 +9,7 @@
             <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Storefront\Page\Shirtnetwork\ShirtnetworkDesignerPageLoader"/>
             <argument type="service" id="Shopware\Core\Checkout\Cart\SalesChannel\CartService"/>
             <argument type="service" id="product.repository"/>
+            <argument type="service" id="Shopware\Storefront\Page\Product\ProductPageLoader"/>
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
