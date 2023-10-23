@@ -6,6 +6,7 @@ use Aggrosoft\Shopware\ShirtnetworkPlugin\EntityExtension\Struct\ShirtnetworkStr
 use Shopware\Core\Framework\Adapter\Twig\StringTemplateRenderer;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Struct\ArrayEntity;
+use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 
 class SkuMatcher
@@ -36,9 +37,9 @@ class SkuMatcher
         $this->apiClient = $apiClient;
     }
 
-    public function match(string $productNumber, Context $context): ArrayEntity {
+    public function match(string $productNumber, string $parentProductNumber, SalesChannelContext $context): ArrayEntity {
 
-        $salesChannelId = $context->getSource()->getSalesChannelId();
+        $salesChannelId = $context->getSalesChannelId();
         $sizes = $this->apiClient->getSizes($salesChannelId);
 
         $sizeSkus = array_map(function($size) {
@@ -50,9 +51,9 @@ class SkuMatcher
         $productMatcher = $this->systemConfigService->get('ShirtnetworkPlugin.config.productskumatcher', $salesChannelId);
 
         $struct = new ArrayEntity([
-            'sartnr' => $sizeMatcher ? trim($this->stringTemplateRenderer->render($sizeMatcher, ['sku' => $productNumber, 'sizeSkus' => $sizeSkus], $context)) : '',
-            'vartnr' => $variantMatcher ? trim($this->stringTemplateRenderer->render($variantMatcher, ['sku' => $productNumber, 'sizeSkus' => $sizeSkus], $context)) : '',
-            'artnr' => $productMatcher ? trim($this->stringTemplateRenderer->render($productMatcher, ['sku' => $productNumber, 'sizeSkus' => $sizeSkus], $context)) : ''
+            'sartnr' => $sizeMatcher ? trim($this->stringTemplateRenderer->render($sizeMatcher, ['sku' => $productNumber, 'psku' => $parentProductNumber, 'sizeSkus' => $sizeSkus], $context->getContext())) : '',
+            'vartnr' => $variantMatcher ? trim($this->stringTemplateRenderer->render($variantMatcher, ['sku' => $productNumber, 'psku' => $parentProductNumber, 'sizeSkus' => $sizeSkus], $context->getContext())) : '',
+            'artnr' => $productMatcher ? trim($this->stringTemplateRenderer->render($productMatcher, ['sku' => $productNumber, 'psku' => $parentProductNumber, 'sizeSkus' => $sizeSkus], $context->getContext())) : ''
         ]);
 
         return $struct;

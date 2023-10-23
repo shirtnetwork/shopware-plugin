@@ -12,12 +12,13 @@ use Shopware\Core\Content\Product\ProductEntity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\Struct\ArrayStruct;
+use Shopware\Core\System\SalesChannel\Entity\SalesChannelRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class DesignerCmsElementResolver extends AbstractCmsElementResolver
 {
     /**
-     * @var EntityRepository
+     * @var SalesChannelRepository
      */
     protected $productRepository;
 
@@ -31,7 +32,7 @@ class DesignerCmsElementResolver extends AbstractCmsElementResolver
      */
     protected $requestStack;
 
-    public function __construct(EntityRepository $productRepository, DesignerPluginOptionBuilder $designerPluginOptionBuilder, RequestStack $requestStack)
+    public function __construct(SalesChannelRepository $productRepository, DesignerPluginOptionBuilder $designerPluginOptionBuilder, RequestStack $requestStack)
     {
         $this->productRepository = $productRepository;
         $this->designerPluginOptionBuilder = $designerPluginOptionBuilder;
@@ -75,7 +76,7 @@ class DesignerCmsElementResolver extends AbstractCmsElementResolver
                 $criteria = new Criteria([$productId]);
                 $criteria->addAssociation('extensions');
                 /** @var ProductEntity $product */
-                $product = $this->productRepository->search($criteria, $resolverContext->getSalesChannelContext()->getContext())->first();
+                $product = $this->productRepository->search($criteria, $resolverContext->getSalesChannelContext())->first();
 
                 if ($product) {
                     $initialData = array_merge([

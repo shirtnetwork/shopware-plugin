@@ -14,6 +14,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\Framework\Routing\Exception\MissingRequestParameterException;
+use Shopware\Core\System\SalesChannel\Entity\SalesChannelRepository;
 use Shopware\Storefront\Page\Product\ProductPageLoadedHook;
 use Shopware\Storefront\Page\Product\ProductPageLoader;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
@@ -40,7 +41,7 @@ class ShirtnetworkDesignerController extends StorefrontController
     private $cartService;
 
     /**
-     * @var EntityRepository
+     * @var SalesChannelRepository
      */
     private $productRepository;
 
@@ -49,7 +50,7 @@ class ShirtnetworkDesignerController extends StorefrontController
      */
     private $productPageLoader;
 
-    public function __construct(ShirtnetworkDesignerPageLoader $designerPageLoader, CartService $cartService, EntityRepository $productRepository, ProductPageLoader $productPageLoader)
+    public function __construct(ShirtnetworkDesignerPageLoader $designerPageLoader, CartService $cartService, SalesChannelRepository $productRepository, ProductPageLoader $productPageLoader)
     {
         $this->designerPageLoader = $designerPageLoader;
         $this->cartService = $cartService;
@@ -144,7 +145,7 @@ class ShirtnetworkDesignerController extends StorefrontController
         $criteria->addFilter(new EqualsFilter('children.productNumber', $productNumber));
         $criteria->addAssociation('children');
         /** @var ProductEntity|null $product */
-        $product = $this->productRepository->search($criteria, $context->getContext())->first();
+        $product = $this->productRepository->search($criteria, $context)->first();
 
         if ($product && $product->getChildren()->count() > 0) {
             $children = $product->getChildren();

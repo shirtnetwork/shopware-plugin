@@ -4,30 +4,22 @@ namespace Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork;
 
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Translation\TranslatorBagInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DesignerPluginOptionBuilder
 {
-    /**
-     * @var SystemConfigService
-     */
-    private $systemConfigService;
 
-    /**
-     * @var UrlGeneratorInterface
-     */
-    private $router;
-
-    /**
-     * @var ApiClient
-     */
-    private $apiClient;
-
-    public function __construct(SystemConfigService $systemConfigService, UrlGeneratorInterface $router, ApiClient $apiClient)
+    public function __construct(
+        private readonly SystemConfigService $systemConfigService,
+        private readonly UrlGeneratorInterface $router,
+        private readonly ApiClient $apiClient,
+        private readonly TranslatorInterface $translator,
+        private readonly RequestStack $requestStack
+    )
     {
-        $this->systemConfigService = $systemConfigService;
-        $this->router = $router;
-        $this->apiClient = $apiClient;
     }
 
     public function build(SalesChannelContext $context, array $initialData = [])
@@ -42,6 +34,8 @@ class DesignerPluginOptionBuilder
             'pages' => [
                 'delivery' => $this->router->generate('frontend.cms.page', ['id' => $this->systemConfigService->get('core.basicInformation.shippingPaymentInfoPage', $salesChannelId)])
             ],
+            'language' => $this->requestStack->getCurrentRequest()->attributes->get('_locale'),
+            'translations' => $this->getTranslations(),
             'settings' => [
                 'debug' =>  boolval($this->systemConfigService->get('ShirtnetworkPlugin.config.debug', $salesChannelId)),
                 'initial' => array_merge([
@@ -78,5 +72,20 @@ class DesignerPluginOptionBuilder
                 ]
             ]
         ];
+    }
+
+    private function getTranslations():array {
+        $catalogue = $this->translator->getCatalogue();
+        $messages = $catalogue->all()['messages'];
+        $translations = [];
+
+        foreach($messages as $key => $value) {
+            if (str_starts_with($key, 'shirtnetwork.designer.')) {
+                $translationKey = str_replace('shirtnetwork.designer.', '', $key);
+                $translations[$translationKey] = $value;
+            }
+        }
+
+        return $translations;
     }
 }

@@ -53,6 +53,10 @@ export default class ShirtnetworkPlugin extends Plugin {
         })
 
         const instance = this.instance = await ShirtnetworkClient.init(config);
+        if (this.options.translations) {
+            instance.$store.dispatch('setTranslation', {lang: this.options.language.split('-')[0].toLowerCase(), translation: this.options.translations})
+        }
+        instance.$store.dispatch('setLanguage', this.options.language)
         instance.$store.dispatch('observe', {event: 'navigate', callback: this.navigate.bind(this)})
         setTimeout(() => PageLoadingIndicatorUtil.remove(), 1500);
     }

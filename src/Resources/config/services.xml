@@ -8,7 +8,7 @@
         <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Storefront\Controller\ShirtnetworkDesignerController" public="true">
             <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Storefront\Page\Shirtnetwork\ShirtnetworkDesignerPageLoader"/>
             <argument type="service" id="Shopware\Core\Checkout\Cart\SalesChannel\CartService"/>
-            <argument type="service" id="product.repository"/>
+            <argument type="service" id="sales_channel.product.repository"/>
             <argument type="service" id="Shopware\Storefront\Page\Product\ProductPageLoader"/>
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
@@ -49,7 +49,7 @@
         </service>
 
         <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\DataResolver\DesignerCmsElementResolver">
-            <argument type="service" id="product.repository"/>
+            <argument type="service" id="sales_channel.product.repository"/>
             <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\DesignerPluginOptionBuilder"/>
             <argument type="service" id="request_stack"/>
             <tag name="shopware.cms.data_resolver" />
@@ -69,6 +69,8 @@
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="service" id="router"/>
             <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\ApiClient"/>
+            <argument type="service" id="translator" />
+            <argument type="service" id="request_stack" />
         </service>
 
         <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\ApiClient" public="true">
@@ -132,6 +134,7 @@
         <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\EntityExtension\Subscriber\ProductLoadedSubscriber">
             <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\SkuMatcher"/>
             <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\Router"/>
+            <argument type="service" id="sales_channel.product.repository"/>
             <tag name="kernel.event_subscriber" />
         </service>
 
