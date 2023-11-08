@@ -1,5 +1,6 @@
 {% block element_designer_button %}
     {% set product = element.data.product %}
+    {% if product.customFields.is_shirtnetwork %}
     <div class="cms-element-designer-button">
         {% block element_designer_button_inner %}
             <a href="{{ product.extensions.shirtnetwork.url }}" class="btn btn-designer btn-primary {{ element.config.buttonClass.value }}">
@@ -7,4 +8,5 @@
             </a>
         {% endblock %}
     </div>
+    {% endif %}
 {% endblock %}
