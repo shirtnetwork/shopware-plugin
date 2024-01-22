@@ -11,6 +11,10 @@
     <template id="shirtnetwork-designer" data-shirtnetwork-plugin data-shirtnetwork-plugin-options="{{ shirtnetworkPluginOptions|default({})|json_encode|escape('html_attr') }}"></template>
 
     {% block designer_overrides %}{% endblock %}
+
+    <div class="shirtnetwork-designer-description product-detail-tabs" data-shirtnetwork-description-plugin>
+
+    </div>
 {% endblock %}
 
 {% block base_script_router %}

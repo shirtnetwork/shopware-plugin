@@ -59,4 +59,14 @@ class SkuMatcher
         return $struct;
     }
 
+    public function usesParentProductNumber(SalesChannelContext $context): bool {
+        $salesChannelId = $context->getSalesChannelId();
+
+        $sizeMatcher = $this->systemConfigService->get('ShirtnetworkPlugin.config.sizeskumatcher', $salesChannelId);
+        $variantMatcher = $this->systemConfigService->get('ShirtnetworkPlugin.config.variantskumatcher', $salesChannelId);
+        $productMatcher = $this->systemConfigService->get('ShirtnetworkPlugin.config.productskumatcher', $salesChannelId);
+        // @TODO: very naive check, maybe we should use regex or something
+        return strpos($sizeMatcher, 'psku') !== false || strpos($variantMatcher, 'psku') !== false || strpos($productMatcher, 'psku') !== false;
+    }
+
 }

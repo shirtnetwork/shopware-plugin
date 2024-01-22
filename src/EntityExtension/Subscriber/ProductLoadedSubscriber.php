@@ -45,6 +45,9 @@ class ProductLoadedSubscriber implements EventSubscriberInterface
     public function onSalesChannelProductLoaded(SalesChannelEntityLoadedEvent $event)
     {
         foreach ($event->getEntities() as $productEntity) {
+            if ($productEntity->hasExtension('shirtnetwork')) {
+                continue;
+            }
             $skuExtension = $this->getShirtnetwork($productEntity, $event->getSalesChannelContext());
             $productEntity->addArrayExtension('shirtnetwork', [
                 'sku' => $skuExtension,
@@ -57,6 +60,9 @@ class ProductLoadedSubscriber implements EventSubscriberInterface
     {
         /** @var ProductEntity $productEntity */
         foreach ($event->getResult()->getEntities() as $productEntity) {
+            if ($productEntity->hasExtension('shirtnetwork')) {
+                continue;
+            }
             $skuExtension = $this->getShirtnetwork($productEntity, $event->getSalesChannelContext());
             $productEntity->addArrayExtension('shirtnetwork', [
                 'sku' => $skuExtension,
@@ -69,6 +75,9 @@ class ProductLoadedSubscriber implements EventSubscriberInterface
     {
         /** @var ProductEntity $productEntity */
         foreach ($event->getResult()->getEntities() as $productEntity) {
+            if ($productEntity->hasExtension('shirtnetwork')) {
+                continue;
+            }
             $skuExtension = $this->getShirtnetwork($productEntity, $event->getSalesChannelContext());
             $productEntity->addArrayExtension('shirtnetwork', [
                 'sku' => $skuExtension,
@@ -78,9 +87,9 @@ class ProductLoadedSubscriber implements EventSubscriberInterface
     }
 
     private function getShirtnetwork(ProductEntity $product, SalesChannelContext $context):ArrayEntity {
-        if ($product->getParentId()) {
+        if ($this->skuMatcher->usesParentProductNumber($context) && $product->getParentId()) {
             $parent = $this->productRepository->search(new Criteria([$product->getParentId()]), $context)->first();
-            $parentSku = $parent->getProductNumber();
+            $parentSku = $parent ? $parent->getProductNumber() : $product->getProductNumber();
         }else{
             $parentSku = $product->getProductNumber();
         }
