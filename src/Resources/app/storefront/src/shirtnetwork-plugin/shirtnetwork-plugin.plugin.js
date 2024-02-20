@@ -156,10 +156,16 @@ export default class ShirtnetworkPlugin extends Plugin {
     }
 
     resolveSku(product, variant, size) {
-        return this.skuScheme
-            .replace('{PRODUCT_SKU}', product)
-            .replace('{VARIANT_SKU}', variant)
-            .replace('{SIZE_SKU}', size)
+        if (this.skuScheme.indexOf('${') !== -1) {
+            const interpolate = (str, product, variant, size) => new Function(`const product = "${product}"; const variant = "${variant}"; const size = "${size}"; return \`${new String(str)}\`;`)();
+            return interpolate(this.skuScheme, product, variant, size)
+        } else {
+            return this.skuScheme
+                .replace('{PRODUCT_SKU}', product)
+                .replace('{VARIANT_SKU}', variant)
+                .replace('{SIZE_SKU}', size)
+        }
+
     }
 
 }

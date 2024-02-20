@@ -62,6 +62,7 @@ class MediaSyncer
 
     public function getMediaFile(string $salesChannelId, Context $context, $picture, $type='variants', $position = 0) {
         $url = $this->apiClient->getAssetUrl($salesChannelId, $type, $picture);
+
         $id = md5('SNW_' . $url, false);
 
         //$medias = $this->mediaRepository->search((new Criteria())->addFilter(new EqualsFilter('fileName', $id)),Context::createDefaultContext());
