@@ -24,7 +24,17 @@
             <template #smart-bar-actions>
                 <!-- eslint-disable-next-line sw-deprecation-rules/no-twigjs-blocks -->
                 {% block shirtnetwork_sync_list_smart_bar_actions_saleschannel_switch %}
-                    <sw-sales-channel-switch @change-sales-channel-id="salesChannelChange" />
+                    <sw-entity-single-select
+                            :placeholder="$tc('shirtnetwork-sync.list.chooseSalesChannel')"
+                            :value="salesChannelId"
+                            entity="sales_channel"
+                            @update:value="salesChannelChange"
+                            style="margin-bottom: 0;"
+                    >
+                        <template #labelProperty="{item, labelProperty}">
+                            <span v-if="item.translated">{{ item.translated[labelProperty] }}</span>
+                        </template>
+                    </sw-entity-single-select>
                 {% endblock %}
             </template>
         {% endblock %}
@@ -68,7 +78,7 @@
 
 
                     {% block shirtnetwork_sync_list_empty_state %}
-                        <sw-empty-state v-if="!isLoading && !pagination.total" :title="$tc('shirtnetwork-sync.list.messageEmpty')"></sw-empty-state>
+                        <sw-empty-state v-if="!isLoading && !pagination.total" :show-description="false" :title="salesChannelId ? $tc('shirtnetwork-sync.list.messageEmpty') : $tc('shirtnetwork-sync.list.messageChooseSalesChannel')"></sw-empty-state>
                     {% endblock %}
 
                     {% block shirtnetwork_sync_list_grid_loader %}

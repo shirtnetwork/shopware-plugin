@@ -8,7 +8,7 @@ Shopware.Component.register('shirtnetwork-logo-category-select', {
     ],
     model: {
         prop: 'value',
-        event: 'change',
+        event: 'update:value',
     },
     props: {
         value: {
@@ -32,8 +32,7 @@ Shopware.Component.register('shirtnetwork-logo-category-select', {
                 return this.value;
             },
             set(newValue) {
-                this.$emit('change', newValue);
-                console.log('change', newValue);
+                this.$emit('update:value', newValue);
             },
         },
         parsedValue() {
@@ -64,7 +63,7 @@ Shopware.Component.register('shirtnetwork-logo-category-select', {
             parsed[this.currentSalesChannelId] = category;
             const newValue = JSON.stringify(parsed);
             this.currentValue = newValue;
-            this.$emit('change', newValue);
+            this.$emit('update:value', newValue);
         }
     }
 });

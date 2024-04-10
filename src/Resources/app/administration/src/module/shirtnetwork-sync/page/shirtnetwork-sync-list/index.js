@@ -95,12 +95,13 @@ Component.register('shirtnetwork-sync-list', {
 
     methods: {
         createdComponent() {
-            this.isLoading = true
-            this.ShirtnetworkApiService.countSyncProducts(this.salesChannelId).then(count => {
-                this.pagination.total = count
+            return this.loadPagination();
+            //this.isLoading = true
+            //this.ShirtnetworkApiService.countSyncProducts(this.salesChannelId).then(count => {
+            //    this.pagination.total = count
                 //this.loadProducts()
-            })
-            return Promise.resolve();
+            //})
+            //return Promise.resolve();
         },
         contextMenuSyncProduct(item){
             console.log(this, item)
@@ -115,14 +116,32 @@ Component.register('shirtnetwork-sync-list', {
         salesChannelChange(salesChannelId){
             this.$refs.shirtnetworkSyncListGrid.resetSelection()
             this.salesChannelId = salesChannelId
-            this.loadProducts()
+            this.pagination.total = 0;
+            this.products = null;
+            this.loadPagination()
         },
-        loadProducts(){
+        async loadPagination() {
+            if (!this.salesChannelId) {
+                this.pagination.total = 0;
+                this.products = null;
+                return;
+            }
             this.isLoading = true
-            this.ShirtnetworkApiService.getSyncProducts((this.pagination.page-1)*this.pagination.limit, this.pagination.limit, this.salesChannelId).then(result => {
-                this.isLoading = false
-                this.products = result
-            })
+            const count = await this.ShirtnetworkApiService.countSyncProducts(this.salesChannelId);
+            this.pagination.total = count
+            this.isLoading = false
+        },
+        async loadProducts(){
+            if (!this.salesChannelId) {
+                this.pagination.total = 0;
+                this.products = null;
+                return;
+            }
+
+            this.isLoading = true
+            const result = await this.ShirtnetworkApiService.getSyncProducts((this.pagination.page-1)*this.pagination.limit, this.pagination.limit, this.salesChannelId);
+            this.products = result;
+            this.isLoading = false
         }
     }
 });

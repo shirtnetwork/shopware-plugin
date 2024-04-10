@@ -102,8 +102,6 @@ class ProductSyncer {
         try {
             $this->productRepository->upsert($productData, $this->context);
         } catch (\Exception $e) {
-            print_r($combinations);
-            print_r($productData);
             throw($e);
         }
         $visibilities = array_map(function($ch) use ($safeID) { return ['id' => md5($safeID.$ch,false), 'productId' => md5($safeID,false), 'salesChannelId' => $ch, 'visibility' => 30];}, $syncSettings->salesChannels);
@@ -121,7 +119,7 @@ class ProductSyncer {
             $data = [
                 'id' => md5($safeOptionID,false),
                 'name' => $product->name . ' ' . $combination['name'],
-                'coverId' => $media[0]['id'],
+                'coverId' => count($media) ? $media[0]['id'] : null,
                 'productNumber' => $combination['sku'],
                 'options' => $combination['option'],
                 'parentId' => md5($safeID,false),
@@ -143,7 +141,6 @@ class ProductSyncer {
         try{
             $this->productRepository->upsert($variantsData,$this->context);
         }catch(\Exception $e){
-            print_r($variantsData);
             throw($e);
         }
 
@@ -157,10 +154,6 @@ class ProductSyncer {
                 'mainVariantId' => $variants[0]['id']
             ]],$this->context);
         } catch (\Exception $e) {
-            print_r([[
-                'id' => $product['id'],
-                'mainVariantId' => $variants[0]['id']
-            ]]);
             throw($e);
         }
     }

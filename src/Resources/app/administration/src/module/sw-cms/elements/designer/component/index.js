@@ -11,7 +11,9 @@ Shopware.Component.register('sw-cms-el-designer', {
     computed: {
         designerUrl() {
             return 'https://www.shirtnetwork.de';
-            //return `https://www.dailymotion.com/embed/video/${this.element.config.dailyUrl.value}`;
+        },
+        assetFilter() {
+            return Shopware.Filter.getByName('asset');
         }
     },
 
