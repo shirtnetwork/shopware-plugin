@@ -142,7 +142,7 @@ class ShirtnetworkDesignerController extends StorefrontController
     {
         $stockInfo = [];
         $criteria = new Criteria();
-        $criteria->addFilter(new EqualsFilter('children.productNumber', $productNumber));
+        $criteria->addFilter(new EqualsFilter('productNumber', $productNumber));
         $criteria->addAssociation('children');
         /** @var ProductEntity|null $product */
         $product = $this->productRepository->search($criteria, $context)->first();
