@@ -17,12 +17,14 @@ use Twig\Node\Expression\ConstantExpression;
 use Twig\Node\IncludeNode;
 use Twig\Node\Node;
 use Twig\Node\NodeOutputInterface;
+use Twig\Attribute\YieldReady;
 
 /**
  * Class IncludeDirNode
  *
  * @package TwigIncludeDir
  */
+#[YieldReady]
 class IncludeDirNode extends Node implements NodeOutputInterface
 {
     public function __construct(
