@@ -41,6 +41,7 @@ class ConfigHelper {
 
         return array(
             'objects' => $aObjects,
+            'options' => $oConfig->options,
             'views' => $views
         );
     }

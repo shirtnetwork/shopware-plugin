@@ -22,7 +22,13 @@
             },
             "text": {
                 "font": "Font"
-            }
+            },
+            "option": {
+                "yes": "Yes",
+                "no": "No"
+            },
+            "typeSample": "With type sample",
+            "correctionView": "With correction view"
         },
         "designer": {
             "add_to_cart": "Add to Cart",

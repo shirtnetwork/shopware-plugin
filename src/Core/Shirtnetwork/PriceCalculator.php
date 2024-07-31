@@ -49,6 +49,9 @@ class PriceCalculator {
         // Upload special price
         $fPrice += $this->_getUploadSpecialPrice($salesChannelId, $oConfig) / $amount;
 
+        // Additional prices
+        $fPrice += $this->_getAdditionalPrices($oProduct, $oConfig) / $amount;
+
         /*
         echo "Calculated Price is $fPrice <br/>";
 
@@ -314,6 +317,21 @@ class PriceCalculator {
             if ($color->id === $cid)
                 return $color;
         }
+    }
+
+    private function _getAdditionalPrices($oProduct, $oConfig): float
+    {
+        $additionalPrice = 0;
+
+        if ($oConfig->options->correctionView || $oConfig->typeSample) {
+            $additionalPrice += $oProduct->correctionViewPrice;
+        }
+
+        if ($oConfig->options->typeSample) {
+            $additionalPrice += $oProduct->typeSamplePrice;
+        }
+
+        return $additionalPrice;
     }
 
 }
