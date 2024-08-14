@@ -323,7 +323,7 @@ class PriceCalculator {
     {
         $additionalPrice = 0;
 
-        if ($oConfig->options->correctionView || $oConfig->typeSample) {
+        if ($oConfig->options->correctionView) {
             $additionalPrice += $oProduct->correctionViewPrice;
         }
 

@@ -9,9 +9,12 @@ use Shopware\Core\Checkout\Cart\Error\Error;
 use Shopware\Core\Checkout\Cart\SalesChannel\CartService;
 use Shopware\Core\Content\Product\Exception\ProductNotFoundException;
 use Shopware\Core\Content\Product\ProductEntity;
+use Shopware\Core\Framework\DataAbstractionLayer\Dbal\Common\RepositoryIterator;
+use Shopware\Core\Framework\DataAbstractionLayer\Dbal\Common\SalesChannelRepositoryIterator;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\Framework\Routing\Exception\MissingRequestParameterException;
 use Shopware\Core\System\SalesChannel\Entity\SalesChannelRepository;
@@ -84,7 +87,7 @@ class ShirtnetworkDesignerController extends StorefrontController
          * @deprecated tag:v6.6.0 - remove complete if statement, cms page id is always set
          *
          * Fallback layout for non-assigned product layout
-        */
+         */
         if (!$page->getCmsPage()) {
             return $this->renderStorefront('@Storefront/storefront/page/product-detail/index.html.twig', ['page' => $page, 'ratingSuccess' => $ratingSuccess]);
         }
@@ -140,15 +143,16 @@ class ShirtnetworkDesignerController extends StorefrontController
     #[Route(path: '/shirtnetwork/designer-stock-infos/{productNumber}', name: 'frontend.shirtnetwork.designer.stock', defaults: ['XmlHttpRequest' => true], methods: ['GET'])]
     public function stockInfos(string $productNumber, Request $request, SalesChannelContext $context)
     {
-        $stockInfo = [];
+        $stockInfos = [];
         $criteria = new Criteria();
-        $criteria->addFilter(new EqualsFilter('productNumber', $productNumber));
-        $criteria->addAssociation('children');
-        /** @var ProductEntity|null $product */
-        $product = $this->productRepository->search($criteria, $context)->first();
+        $criteria->addFilter(new EqualsFilter('parent.productNumber', $productNumber));
+        $criteria->setLimit(10);
+        $criteria->addSorting(new FieldSorting('id'));
 
-        if ($product && $product->getChildren()->count() > 0) {
-            $children = $product->getChildren();
+        $iterator = new SalesChannelRepositoryIterator($this->productRepository, $context, $criteria);
+
+        while (($result = $iterator->fetch()) !== null) {
+            $children = $result->getEntities();
             $stockInfo = $children->map(function(ProductEntity $child){
                 $extension = $child->getExtension('shirtnetwork');
                 return [
@@ -157,9 +161,10 @@ class ShirtnetworkDesignerController extends StorefrontController
                     'stock' => $child->getIsCloseout() ? max(0, $child->getAvailableStock()) : 999999
                 ];
             });
+            $stockInfos = array_merge($stockInfos, array_values($stockInfo));
         }
 
-        return new JsonResponse(array_values($stockInfo));
+        return new JsonResponse($stockInfos);
     }
 
 
