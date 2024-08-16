@@ -22,6 +22,7 @@ export default class ShirtnetworkPlugin extends Plugin {
         this.client = new AsyncClient(this.options.swAccessKey)
         this.cartItems = []
         this.cache = {}
+        this.stockCache = {};
         this.baseSkuScheme = this.options.baseSkuScheme || '{PRODUCT_SKU}'
         this.skuScheme = this.options.skuScheme || '{PRODUCT_SKU}-{VARIANT_SKU}-{SIZE_SKU}'
         this.pages = this.options.pages || {}
@@ -80,8 +81,13 @@ export default class ShirtnetworkPlugin extends Plugin {
     async getStockInfos(data) {
         const resolvedSku = this.resolveBaseSku(data.psku, data.vsku, data.ssku)
 
+        if (this.stockCache[resolvedSku]) {
+            return this.stockCache[resolvedSku] ?? []
+        }
+
         if (resolvedSku) {
             const result = JSON.parse(await this.client.get('/shirtnetwork/designer-stock-infos/'+resolvedSku))
+            this.stockCache[resolvedSku] = result
             return result ?? []
         }
 
