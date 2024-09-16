@@ -126,10 +126,6 @@
             <argument type="service" id="order.repository"/>
             <tag name="kernel.event_subscriber"/>
         </service>
-        <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Subscriber\CheckoutConfirmPageLoadedSubscriber" public="true">
-            <argument type="service" id="Shopware\Core\Checkout\Cart\SalesChannel\CartService"/>
-            <tag name="kernel.event_subscriber"/>
-        </service>
 
         <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\EntityExtension\Extension\Content\Product\ShirtnetworkProductExtension">
             <tag name="shopware.entity.extension"/>
