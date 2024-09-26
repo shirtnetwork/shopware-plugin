@@ -98,6 +98,7 @@
         </service>
         <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\ConfigHelper" public="true">
             <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\ApiClient"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
         </service>
         <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\PriceCalculator" public="true">
             <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\ApiClient"/>
