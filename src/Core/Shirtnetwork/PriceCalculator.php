@@ -37,6 +37,9 @@ class PriceCalculator {
         // Size price
         $fPrice += $oSize ? $oSize->price : 0;
 
+        // Additional prices
+        $fPrice += $this->_getAdditionalPrices($oProduct, $oConfig) / $amount;
+
         // Dodger if product is fix price we can return immediately
         if ($oProduct->fixPrice) return $fPrice;
 
@@ -49,8 +52,7 @@ class PriceCalculator {
         // Upload special price
         $fPrice += $this->_getUploadSpecialPrice($salesChannelId, $oConfig) / $amount;
 
-        // Additional prices
-        $fPrice += $this->_getAdditionalPrices($oProduct, $oConfig) / $amount;
+
 
         /*
         echo "Calculated Price is $fPrice <br/>";
