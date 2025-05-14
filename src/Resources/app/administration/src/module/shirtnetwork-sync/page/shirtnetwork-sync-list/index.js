@@ -13,7 +13,7 @@ Component.register('shirtnetwork-sync-list', {
 
     data() {
         return {
-            products: null,
+            allProducts: null,
             isLoading: false,
             showBulkSyncModal: false,
             salesChannelId: null,
@@ -70,7 +70,9 @@ Component.register('shirtnetwork-sync-list', {
                     inlineEdit: false,
                     width: '200px'
                 },
-            ]
+            ],
+            storeKey: 'grid.filter.shirtnetworksync',
+            filterCriteria: null,
         };
     },
 
@@ -93,9 +95,75 @@ Component.register('shirtnetwork-sync-list', {
         }
     },
 
+    computed: {
+        filteredProducts() {
+            let filteredProducts = this.allProducts
+            if (filteredProducts && this.filterCriteria) {
+                filteredProducts = filteredProducts.filter(product => {
+                    let filterResult = true;
+                    this.filterCriteria.forEach(criteria => {
+                        if (criteria.type === 'contains') {
+                            if (!product[criteria.field].toString().toLowerCase().includes(criteria.value.toString().toLowerCase())) {
+                                filterResult = false;
+                            }
+                        } else if (criteria.type === 'equals') {
+                            if (!product[criteria.field].toString().toLowerCase() === criteria.value.toString().toLowerCase()) {
+                                filterResult = false;
+                            }
+                        }
+                    })
+                    return filterResult;
+                })
+            }
+            return filteredProducts;
+        },
+        products() {
+            const offset = (this.pagination.page - 1) * this.pagination.limit;
+            return this.filteredProducts?.slice(offset, offset + this.pagination.limit)
+
+        },
+        totalProducts() {
+            return this.filteredProducts?.length || 0;
+        },
+        listFilters() {
+            return [
+                {
+                    name: 'name',
+                    label: 'shirtnetwork-sync.list.filterName',
+                    type: 'string-filter',
+                    value: '',
+                    property: 'name'
+                },
+                {
+                    name: 'artNr',
+                    label: 'shirtnetwork-sync.list.filterArtNr',
+                    type: 'string-filter',
+                    value: '',
+                    property: 'artNr'
+                },
+            ]
+        },
+        defaultFilters() {
+            return this.listFilters.map(f => f.name)
+        },
+        activeFilterNumber() {
+            return this.filterCriteria?.length;
+        }
+    },
+
     methods: {
-        createdComponent() {
-            return this.loadPagination();
+        async createdComponent() {
+            const filters = await Shopware.Service('filterService').getStoredFilters(this.storeKey)
+            if (filters) {
+                const criterias = [];
+                for(const filter of Object.values(filters)) {
+                    criterias.push(...filter.criteria)
+                }
+                this.filterCriteria = criterias
+            }
+
+            //this.filterCriteria = await Shopware.Service('filterService').mergeWithStoredFilters(this.storeKey, this.filterCriteria)
+            return this.loadProducts();
             //this.isLoading = true
             //this.ShirtnetworkApiService.countSyncProducts(this.salesChannelId).then(count => {
             //    this.pagination.total = count
@@ -116,32 +184,24 @@ Component.register('shirtnetwork-sync-list', {
         salesChannelChange(salesChannelId){
             this.$refs.shirtnetworkSyncListGrid.resetSelection()
             this.salesChannelId = salesChannelId
-            this.pagination.total = 0;
-            this.products = null;
-            this.loadPagination()
-        },
-        async loadPagination() {
-            if (!this.salesChannelId) {
-                this.pagination.total = 0;
-                this.products = null;
-                return;
-            }
-            this.isLoading = true
-            const count = await this.ShirtnetworkApiService.countSyncProducts(this.salesChannelId);
-            this.pagination.total = count
-            this.isLoading = false
+            this.allProducts = null;
+            this.loadProducts()
         },
         async loadProducts(){
             if (!this.salesChannelId) {
-                this.pagination.total = 0;
-                this.products = null;
+                this.allProducts = null;
                 return;
             }
 
-            this.isLoading = true
-            const result = await this.ShirtnetworkApiService.getSyncProducts((this.pagination.page-1)*this.pagination.limit, this.pagination.limit, this.salesChannelId);
-            this.products = result;
-            this.isLoading = false
+            if (!this.allProducts) {
+                this.isLoading = true
+                this.allProducts = await this.ShirtnetworkApiService.getSyncProducts(this.salesChannelId);
+                this.isLoading = false
+            }
+
+        },
+        updateFilter(criteria) {
+            this.filterCriteria = criteria;
         }
     }
 });

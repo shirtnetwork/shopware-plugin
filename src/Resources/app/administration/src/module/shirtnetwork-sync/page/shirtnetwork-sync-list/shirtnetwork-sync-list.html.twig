@@ -11,7 +11,7 @@
 
                         {% block shirtnetwork_sync_list_smart_bar_header_amount %}
                             <span v-if="!isLoading" class="sw-page__smart-bar-amount">
-                                ({{ pagination.total }})
+                                ({{ totalProducts }})
                             </span>
                         {% endblock %}
 
@@ -58,8 +58,18 @@
                                   identifier="shirtnetwork-sync-list-item-grid"
                                   class="shirtnetwork-sync-list-items-grid__data-grid">
                         <template #column-active="{ item }">
-                            <sw-icon v-if="item.active" name="small-default-checkmark-line-medium" small class="is--active"></sw-icon>
-                            <sw-icon v-else name="small-default-x-line-medium" small class="is--inactive"></sw-icon>
+                            <sw-icon
+                                    v-if="item.active"
+                                    name="regular-checkmark-xs"
+                                    small
+                                    class="is--active"
+                            />
+                            <sw-icon
+                                    v-else
+                                    name="regular-times-s"
+                                    small
+                                    class="is--inactive"
+                            />
                         </template>
                         <template #bulk>
                             <a class="link link-danger" @click="showBulkSyncModal = true">
@@ -70,7 +80,7 @@
                             <shirtnetwork-sync-modal :sales-channel-id="salesChannelId" :selection="selection" v-if="showBulkSyncModal" @modal-close="showBulkSyncModal = false" />
                         </template>
                         <template #pagination>
-                            <sw-pagination :total="pagination.total" :limit="pagination.limit" :page="pagination.page" @page-change="paginationChange"></sw-pagination>
+                            <sw-pagination :total="totalProducts" :limit="pagination.limit" :page="pagination.page" @page-change="paginationChange"></sw-pagination>
                         </template>
                     </sw-data-grid>
                     {% endblock %}
@@ -78,7 +88,7 @@
 
 
                     {% block shirtnetwork_sync_list_empty_state %}
-                        <sw-empty-state v-if="!isLoading && !pagination.total" :show-description="false" :title="salesChannelId ? $tc('shirtnetwork-sync.list.messageEmpty') : $tc('shirtnetwork-sync.list.messageChooseSalesChannel')"></sw-empty-state>
+                        <sw-empty-state v-if="!isLoading && !totalProducts" :show-description="false" :title="salesChannelId ? $tc('shirtnetwork-sync.list.messageEmpty') : $tc('shirtnetwork-sync.list.messageChooseSalesChannel')"></sw-empty-state>
                     {% endblock %}
 
                     {% block shirtnetwork_sync_list_grid_loader %}
@@ -88,5 +98,21 @@
             {% endblock %}
         </template>
 
+        {% block shirtnetwork_sync_list_sidebar %}
+            <template #sidebar>
+                <sw-sidebar class="sw-order-list__sidebar">
+                    {% block shirtnetwork_sync_list_sidebar_filter %}
+                        <sw-sidebar-filter-panel
+                                entity="shirtnetworkproduct"
+                                :store-key="storeKey"
+                                :filters="listFilters"
+                                :defaults="defaultFilters"
+                                :active-filter-number="activeFilterNumber"
+                                @criteria-changed="updateFilter"
+                        />
+                    {% endblock %}
+                </sw-sidebar>
+            </template>
+        {% endblock %}
     </sw-page>
 {% endblock %}
