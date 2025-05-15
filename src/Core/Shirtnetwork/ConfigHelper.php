@@ -43,7 +43,11 @@ class ConfigHelper {
         return array(
             'objects' => $aObjects,
             'options' => $oConfig->options,
-            'views' => $views
+            'views' => $views,
+            'product' => $oConfig->product,
+            'variant' => $oConfig->variant,
+            'supplier' => $oConfig->supplier,
+            'user' => $oConfig->user,
         );
     }
 

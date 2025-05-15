@@ -1,0 +1,19 @@
+{% block sw_order_list_smart_bar_header_amount %}
+    {% parent %}
+
+    <span
+            v-if="!isLoading"
+            class="sw-page__smart-bar-shirtnetwork-provision"
+    >
+        Shirtnetwork Provision {{ currencyFilter(orders.aggregations.shirtnetwork_quantity.sum + orders.aggregations.shirtnetwork_sum.sum) }}
+    </span>
+{% endblock %}
+
+{% block sw_order_list_grid_columns %}
+    {% parent %}
+    {% block sw_order_list_grid_columns_shirtnetwork_provision %}
+        <template #column-shirtnetworkProvision="{ item }">
+            {{ currencyFilter(item.customFields?.shirtnetwork?.sum + item.customFields?.shirtnetwork?.quantity, item.currency.isoCode) }}
+        </template>
+    {% endblock %}
+{% endblock %}
