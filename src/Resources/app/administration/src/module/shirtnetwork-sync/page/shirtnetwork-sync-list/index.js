@@ -129,14 +129,14 @@ Component.register('shirtnetwork-sync-list', {
             return [
                 {
                     name: 'name',
-                    label: 'shirtnetwork-sync.list.filterName',
+                    label: this.$tc('shirtnetwork-sync.list.filterName'),
                     type: 'string-filter',
                     value: '',
                     property: 'name'
                 },
                 {
                     name: 'artNr',
-                    label: 'shirtnetwork-sync.list.filterArtNr',
+                    label: this.$tc('shirtnetwork-sync.list.filterArtNr'),
                     type: 'string-filter',
                     value: '',
                     property: 'artNr'
