@@ -46,6 +46,9 @@ class PriceCalculator {
         // Object prices
         $fPrice += $this->_getObjectsPrice($salesChannelId, $oConfig);
 
+        // Printtype Scale price
+        $fPrice += $this->_getPrinttypeScalePrice($salesChannelId, $oConfig, $amount);
+
         // View prices
         $fPrice += $this->_getViewPrices($salesChannelId, $oConfig);
 
@@ -123,6 +126,106 @@ class PriceCalculator {
         }
 
         return $objectsPrice;
+    }
+
+    protected function _getPrinttypeScalePrice (string $salesChannelId, $oConfig, $amount = 1) {
+        $aObjects = $oConfig->objects;
+
+        // Dodge no objects, return 0
+        if (count($oConfig->objects) == 0) return 0;
+
+        $map = $this->_generateColorMap($salesChannelId, $aObjects);
+        $printtypeScalePrice = 0;
+
+        foreach ($map as $printtypeId => $colors) {
+            $printtype = $this->_getPrinttypeById($salesChannelId, $printtypeId);
+            if ($printtype) {
+                $printtypeScalePrice += $this->_getPrinttypeColorScalePriceByQuantity($printtype, count($colors), $amount);
+            }
+        }
+        return $printtypeScalePrice;
+    }
+
+    protected function _getPrinttypeColorScalePriceByQuantity($printtype, $colors, $quantity) {
+        $colorPriceScale = $this->_getPrinttypeColorPriceScales($printtype);
+        if (!$colorPriceScale) {
+            return 0;
+        }
+
+        $price = 0;
+        foreach ($colorPriceScale as $item) {
+            if ($colors >= $item['colors'] && $quantity >= $item['quantity']) {
+                $price = $item['price'];
+            } else {
+                break;
+            }
+        }
+
+        return $price;
+    }
+
+    protected function _getPrinttypeColorPriceScales($printtype) {
+        if (empty($printtype->colorPriceScale)) {
+            return null;
+        }
+
+        $scales = explode(';', $printtype->colorPriceScale);
+        $result = array_map(function ($scale) {
+            $item = explode(',', $scale);
+            return [
+                'colors' => (int) $item[0],
+                'quantity' => (int) $item[1],
+                'price' => (float) $item[2]
+            ];
+        }, $scales);
+
+        usort($result, function ($a, $b) {
+            return $a['colors'] <=> $b['colors'] ?: $a['quantity'] <=> $b['quantity'];
+        });
+
+        return $result;
+    }
+
+    protected function _getPrinttypeById($salesChannelId, $printtypeId) {
+        $oShirtnetwork = $this->client;
+        return $oShirtnetwork->getPrinttypeById($salesChannelId, $printtypeId);
+    }
+
+    protected function _generateColorMap($salesChannelId, $objects) {
+
+        // all colors, with duplicates
+        $objectColors = $this->_getAllObjectsColors($salesChannelId, $objects);
+
+        // reduce to unique colors
+        $uniqueColors = array_values(array_reduce($objectColors, function ($carry, $item) {
+            $carry[$item->id] = $item;
+            return $carry;
+        }, []));
+
+        // map them by printtype
+        $colorMap = [];
+        foreach ($uniqueColors as $color) {
+            if (!isset($colorMap[$color->printtype])) {
+                $colorMap[$color->printtype] = [];
+            }
+            $colorMap[$color->printtype][] = $color;
+        }
+        return $colorMap;
+    }
+
+    protected function _getAllObjectsColors($salesChannelId, $objects) {
+        $objectColors = [];
+        foreach ($objects as $object) {
+            foreach ($object->meta->fills as $fill) {
+                if ($fill) {
+                    $color = $this->_getColorById($salesChannelId, $object->meta->printtype->id, $fill->id);
+                    if ($color) {
+                        $objectColors[] = $color;
+                    }
+                }
+            }
+        }
+        return $objectColors;
     }
 
     protected function _getViewById ($aViews, $viewId) {
