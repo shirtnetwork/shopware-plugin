@@ -8,6 +8,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RecursiveRegexIterator;
 use RegexIterator;
+use Shopware\Core\Framework\Adapter\Twig\Node\SwInclude;
 use Twig\Compiler;
 use Twig\Error\LoaderError;
 use Twig\Loader\ChainLoader;
@@ -105,7 +106,7 @@ class IncludeDirNode extends Node implements NodeOutputInterface
 
         foreach ($files as $file) {
             $file = str_replace(DIRECTORY_SEPARATOR, '/', str_replace($loaderPath, '', $file));
-            $template = new IncludeNode(
+            $template = new SwInclude(
                 new ConstantExpression($file, $this->lineno),
                 $this->hasNode('variables') ? $this->getNode('variables') : null,
                 $this->getAttribute('only'),

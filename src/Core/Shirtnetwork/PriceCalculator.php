@@ -16,7 +16,7 @@ class PriceCalculator {
         bcscale(15);
     }
 
-    public function getPrice ($salesChannelId, $config, $amount = 1) {
+    public function getPrice ($salesChannelId, $config, $amount = 1, $netto = false) {
 
         $oShirtnetwork = $this->client;
         $oConfig = $oShirtnetwork->getConfig($salesChannelId, $config);
@@ -55,7 +55,10 @@ class PriceCalculator {
         // Upload special price
         $fPrice += $this->_getUploadSpecialPrice($salesChannelId, $oConfig) / $amount;
 
-
+        if ($netto) {
+            $taxRate = floatval($oProduct->tax->value);
+            $fPrice = $fPrice / (1 + ($taxRate / 100));
+        }
 
         /*
         echo "Calculated Price is $fPrice <br/>";
