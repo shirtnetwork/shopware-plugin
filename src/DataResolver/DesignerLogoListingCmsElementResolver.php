@@ -4,14 +4,11 @@ namespace Aggrosoft\Shopware\ShirtnetworkPlugin\DataResolver;
 
 use Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\ApiClient;
 use Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork\DesignerPluginOptionBuilder;
-use Shopware\Core\Content\Category\CategoryEntity;
 use Shopware\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
 use Shopware\Core\Content\Cms\DataResolver\Element\AbstractCmsElementResolver;
 use Shopware\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
-use Shopware\Core\Content\Cms\DataResolver\ResolverContext\EntityResolverContext;
 use Shopware\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
 use Shopware\Core\Content\Cms\DataResolver\CriteriaCollection;
-use Shopware\Core\Content\LandingPage\LandingPageEntity;
 use Shopware\Core\Content\Product\ProductEntity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -51,20 +48,20 @@ class DesignerLogoListingCmsElementResolver extends AbstractCmsElementResolver
     {
         $request = $resolverContext->getRequest();
         $context = $resolverContext->getSalesChannelContext();
+
+        $navigationId = $this->getNavigationId($request, $context);
         $salesChannelId = $context->getSalesChannelId();
 
         $page = $request->get('p') ?? 1;
-        $contextData = $this->getContextData($resolverContext);
+        $logoCategoryId = $this->getLogoCategoryId($navigationId, $context);
 
-        $logoCategoryId = $contextData['logoCategoryId'] ?? null;
-
-        if(!$logoCategoryId){
-            return;
+        if ($logoCategoryId) {
+            $logos = $this->apiClient->getLogosByCategory($salesChannelId, $logoCategoryId, 15, $page - 1);
+            $total = $this->apiClient->getLogoCountByCategory($salesChannelId, $logoCategoryId);
+        }else {
+            $logos = [];
+            $total = 0;
         }
-
-        $logos = $this->apiClient->getLogosByCategory($salesChannelId, $logoCategoryId, 15, $page - 1);
-        $total = $this->apiClient->getLogoCountByCategory($salesChannelId, $logoCategoryId);
-
 
         $slot->setData(new ArrayStruct([
             'logos' => $logos,
@@ -76,29 +73,41 @@ class DesignerLogoListingCmsElementResolver extends AbstractCmsElementResolver
                 'total' => $total,
                 'page' => $page
             ],
-            'currentFilters' => $contextData
+            'currentFilters' => [
+                'navigationId' => $navigationId,
+                'logoCategoryId' => $logoCategoryId,
+            ]
         ]));
 
     }
 
-    private function getContextData(ResolverContext $resolverContext): ?array
+    private function getNavigationId(Request $request, SalesChannelContext $salesChannelContext): string
     {
-        $data = [];
-
-        if ($resolverContext instanceof EntityResolverContext) {
-            $entity = $resolverContext->getEntity();
-
-            if ($entity instanceof CategoryEntity) {
-                $customFields = $entity->getCustomFields();
-                if (isset($customFields['logo_category_id'])) {
-                    $field = json_decode($customFields['logo_category_id'], true);
-                    $data['logoCategoryId'] = $field[$resolverContext->getSalesChannelContext()->getSalesChannelId()];
-                    $data['navigationId'] = $entity->getId();
-                }
-            }
+        if ($navigationId = $request->get('navigationId')) {
+            return $navigationId;
         }
 
-        return $data;
+        $params = $request->attributes->get('_route_params');
+
+        if ($params && isset($params['navigationId'])) {
+            return $params['navigationId'];
+        }
+
+        return $salesChannelContext->getSalesChannel()->getNavigationCategoryId();
     }
 
+    /**
+     * @param string $navigationId
+     * @param SalesChannelContext $context
+     * @return ?string
+     */
+    public function getLogoCategoryId(string $navigationId, SalesChannelContext $context): ?int
+    {
+        $salesChannelId = $context->getSalesChannelId();
+        $category = $this->categoryRepository->search(new Criteria([$navigationId]), $context->getContext())->first();
+        $customFields = $category->getCustomFields();
+        $categoryField = $customFields['logo_category_id'];
+        $logoCategories = $categoryField ? json_decode($categoryField) : [];
+        return $logoCategories && isset($logoCategories->$salesChannelId) ? $logoCategories->$salesChannelId : null;
+    }
 }

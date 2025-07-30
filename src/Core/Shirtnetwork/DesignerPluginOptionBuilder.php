@@ -28,7 +28,6 @@ class DesignerPluginOptionBuilder
 
         return [
             'version' => $this->systemConfigService->get('ShirtnetworkPlugin.config.designerversion', $salesChannelId),
-            'baseSkuScheme' => $this->systemConfigService->get('ShirtnetworkPlugin.config.baseskuscheme', $salesChannelId),
             'skuScheme' => $this->systemConfigService->get('ShirtnetworkPlugin.config.skuscheme', $salesChannelId),
             'swToken' => $context->getToken(),
             'swAccessKey' => $context->getSalesChannel()->getAccessKey(),

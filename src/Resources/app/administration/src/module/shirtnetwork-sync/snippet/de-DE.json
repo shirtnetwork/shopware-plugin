@@ -12,11 +12,7 @@
             "columnDescription": "Beschreibung",
             "bulkSyncProducts": "Produkte synchronisieren",
             "textProducts": "Shirtnetwork Produkte",
-            "messageEmpty": "Keine Shirtnetwork Produkte gefunden, prüfen Sie die Plugin Einstellungen",
-            "messageChooseSalesChannel": "Wählen Sie oben einen Verkaufskanal aus",
-            "chooseSalesChannel": "Verkaufskanal wählen",
-            "filterName": "Titel",
-            "filterArtNr": "Artikelnummer"
+            "messageEmpty": "Keine Shirtnetwork Produkte gefunden, prüfen Sie die Plugin Einstellungen"
         },
         "modal": {
             "title": "Produkte synchronisieren",

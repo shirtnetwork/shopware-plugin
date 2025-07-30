@@ -73,13 +73,21 @@ class ShirtnetworkApiController extends AbstractController
 
     }
 
-    #[Route(path: '/api/shirtnetwork/getsyncproducts/{salesChannelId}', name: 'api.action.shirtnetwork.getsyncproducts', methods: ['GET'])]
-    public function getSyncProducts(Request $request, string $salesChannelId, string $searchTerm = '')
+    #[Route(path: '/api/shirtnetwork/getsyncproducts/{start}/{num}/{salesChannelId}', name: 'api.action.shirtnetwork.getsyncproducts', methods: ['GET'])]
+    public function getSyncProducts(Request $request, $start = 0, $num = 25, $salesChannelId = '')
     {
-        $params = array("oUser" => $this->apiClient->getSOAPUserObject($salesChannelId), 'sSearchTerm' => '');
-        $products = $this->apiClient->SOAPRequest($salesChannelId, "ProductService", "getAllUserSelectedBySearchTerm", $params, false, true);
+        $params = array("oUser" => $this->apiClient->getSOAPUserObject($salesChannelId), "iStart" => $start, "iNumProducts" => $num);
+        $products = $this->apiClient->SOAPRequest($salesChannelId, "ProductService", "getUserProducts", $params, false, true);
         return new JsonResponse($products->source);
 
+    }
+
+    #[Route(path: '/api/shirtnetwork/countsyncproducts/{salesChannelId}', name: 'api.action.shirtnetwork.countsyncproducts', methods: ['GET'])]
+    public function countSyncProducts(Request $request, $salesChannelId = '')
+    {
+        $params = array("oUser" => $this->apiClient->getSOAPUserObject($salesChannelId));
+        $count = $this->apiClient->SOAPRequest($salesChannelId, "ProductService", "getUserProductsCount", $params, false, true);
+        return new JsonResponse($count);
     }
 
     #[Route(path: '/api/shirtnetwork/syncproducts/{salesChannelId}', name: 'api.action.shirtnetwork.syncproducts', methods: ['POST'])]

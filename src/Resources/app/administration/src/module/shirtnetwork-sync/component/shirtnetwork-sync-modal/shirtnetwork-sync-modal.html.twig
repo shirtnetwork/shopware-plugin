@@ -11,7 +11,7 @@
                 :placeholder="$tc('shirtnetwork-sync.modal.variantPropertyGroupPlaceholder')"
                 entity="property_group"
                 :context="selectContext"
-                v-model:value="selectedVariantPropertyGroup">
+                v-model="selectedVariantPropertyGroup">
             </sw-entity-single-select>
 
             <sw-entity-single-select
@@ -19,7 +19,7 @@
                 :placeholder="$tc('shirtnetwork-sync.modal.sizePropertyGroupPlaceholder')"
                 entity="property_group"
                 :context="selectContext"
-                v-model:value="selectedSizePropertyGroup">
+                v-model="selectedSizePropertyGroup">
             </sw-entity-single-select>
         </sw-container>
         <sw-container columns="1fr 1fr" gap="0px 30px">
@@ -28,7 +28,7 @@
                 :label="$tc('shirtnetwork-sync.modal.salesChannel')"
                 :repository="salesChannelRepository"
                 :context="selectContext"
-                v-model:value="selectedSalesChannels"
+                :ids="selectedSalesChannels"
                 @change="setSalesChannels">
             </sw-entity-multi-id-select>
 
@@ -36,7 +36,7 @@
                 :label="$tc('shirtnetwork-sync.modal.tax')"
                 entity="tax"
                 :context="selectContext"
-                v-model:value="selectedTax">
+                v-model="selectedTax">
             </sw-entity-single-select>
         </sw-container>
         <sw-category-tree-field
@@ -44,7 +44,7 @@
             class="sw-product-detail__select-category"
             :placeholder="$tc('sw-product.categoryForm.placeholderCategory')">
         </sw-category-tree-field>
-        <sw-checkbox-field :label="$tc('shirtnetwork-sync.modal.variantExpressionForListings')" v-model:value="variantExpressionForListings"></sw-checkbox-field>
+        <sw-checkbox-field :label="$tc('shirtnetwork-sync.modal.variantExpressionForListings')" v-model="variantExpressionForListings"></sw-checkbox-field>
 
 
     </template>

@@ -13,9 +13,4 @@ Component.register('sw-cms-designer-logo-preview', {
             required: false,
         },
     },
-    computed: {
-        assetFilter() {
-            return Shopware.Filter.getByName('asset');
-        },
-    }
 });

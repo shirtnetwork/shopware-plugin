@@ -22,8 +22,6 @@ export default class ShirtnetworkPlugin extends Plugin {
         this.client = new AsyncClient(this.options.swAccessKey)
         this.cartItems = []
         this.cache = {}
-        this.stockCache = {};
-        this.baseSkuScheme = this.options.baseSkuScheme || '{PRODUCT_SKU}'
         this.skuScheme = this.options.skuScheme || '{PRODUCT_SKU}-{VARIANT_SKU}-{SIZE_SKU}'
         this.pages = this.options.pages || {}
 
@@ -79,15 +77,10 @@ export default class ShirtnetworkPlugin extends Plugin {
     }
 
     async getStockInfos(data) {
-        const resolvedSku = this.resolveBaseSku(data.psku, data.vsku, data.ssku)
-
-        if (this.stockCache[resolvedSku]) {
-            return this.stockCache[resolvedSku] ?? []
-        }
+        const resolvedSku = this.resolveSku(data.psku, data.vsku, data.ssku)
 
         if (resolvedSku) {
             const result = JSON.parse(await this.client.get('/shirtnetwork/designer-stock-infos/'+resolvedSku))
-            this.stockCache[resolvedSku] = result
             return result ?? []
         }
 
@@ -163,23 +156,16 @@ export default class ShirtnetworkPlugin extends Plugin {
     }
 
     resolveSku(product, variant, size) {
-        return this.resolveByScheme(product, variant, size, this.skuScheme)
-    }
-
-    resolveBaseSku(product, variant, size) {
-        return this.resolveByScheme(product, variant, size, this.baseSkuScheme)
-    }
-
-    resolveByScheme(product, variant, size, scheme) {
-        if (scheme.indexOf('${') !== -1) {
+        if (this.skuScheme.indexOf('${') !== -1) {
             const interpolate = (str, product, variant, size) => new Function(`const product = "${product}"; const variant = "${variant}"; const size = "${size}"; return \`${new String(str)}\`;`)();
-            return interpolate(scheme, product, variant, size)
+            return interpolate(this.skuScheme, product, variant, size)
         } else {
-            return scheme
+            return this.skuScheme
                 .replace('{PRODUCT_SKU}', product)
                 .replace('{VARIANT_SKU}', variant)
                 .replace('{SIZE_SKU}', size)
         }
+
     }
 
 }

@@ -3,15 +3,14 @@
 namespace Aggrosoft\Shopware\ShirtnetworkPlugin\Core\Shirtnetwork;
 
 use Shopware\Core\Framework\Context;
-use Shopware\Core\System\SystemConfig\SystemConfigService;
 
 class ConfigHelper {
 
-    public function __construct(
-        private readonly ApiClient $client,
-        private readonly SystemConfigService $systemConfigService
-    )
+    protected $client;
+
+    public function __construct(ApiClient $client)
     {
+        $this->client = $client;
         // Use a precision of 15 for all further calculations
         bcscale(15);
     }
@@ -19,7 +18,7 @@ class ConfigHelper {
     public function getShirtnetworkInfos(string $salesChannelId, $sConfigId, $blIncludeEmptyViews = true) {
         $oShirtnetwork = $this->client;
         $oConfig = $oShirtnetwork->getConfig($salesChannelId, $sConfigId);
-        $showRealSizes = $this->systemConfigService->get('ShirtnetworkPlugin.config.showrealsizes', $salesChannelId);
+
         $aObjects = array();
         foreach($oConfig->objects as $object){
             $oView = $oShirtnetwork->getViewById($salesChannelId, $object->meta->view->id);
@@ -27,7 +26,7 @@ class ConfigHelper {
                 'type' => $object->type,
                 'fills' => $object->meta->fills,
                 'printtype' => $object->meta->printtype->name,
-                'dimensions' => $showRealSizes ? $this->getObjectDimensions($oView,$object) : null,
+                'dimensions' => $this->getObjectDimensions($oView,$object),
                 'view' => $object->meta->view->key
             );
             $aObject = array_merge($aObject, $this->getShirtnetworkTypeInfos($salesChannelId, $object));
@@ -42,12 +41,7 @@ class ConfigHelper {
 
         return array(
             'objects' => $aObjects,
-            'options' => $oConfig->options,
-            'views' => $views,
-            'product' => $oConfig->product,
-            'variant' => $oConfig->variant,
-            'supplier' => $oConfig->supplier,
-            'user' => $oConfig->user,
+            'views' => $views
         );
     }
 

@@ -41,15 +41,9 @@
             <label lang="de-DE">Start Artikelnummer</label>
         </input-field>
         <input-field>
-            <name>baseskuscheme</name>
-            <label>Base Sku Scheme</label>
-            <label lang="de-DE">Hauptartikel Nummernschema</label>
-            <defaultValue>{PRODUCT_SKU}</defaultValue>
-        </input-field>
-        <input-field>
             <name>skuscheme</name>
             <label>Sku Scheme</label>
-            <label lang="de-DE">Artikel Nummernschema</label>
+            <label lang="de-DE">Artikelnummern Schema</label>
             <defaultValue>{PRODUCT_SKU}-{VARIANT_SKU}-{SIZE_SKU}</defaultValue>
         </input-field>
         <input-field>

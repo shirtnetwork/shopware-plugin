@@ -4,14 +4,14 @@
         <!-- eslint-disable-next-line sw-deprecation-rules/no-twigjs-blocks -->
         {% block sw_cms_element_designer_config_product_select %}
         <sw-cms-mapping-field
-                v-model:value="element.config.product"
+                v-model="element.config.product"
                 entity="product"
                 value-types="string"
                 :label="$tc('sw-cms.elements.designer.config.label.selection')"
         >
             <sw-entity-single-select
                     ref="cmsProductSelection"
-                    v-model:value="element.config.product.value"
+                    v-model="element.config.product.value"
                     :placeholder="$tc('sw-cms.elements.designer.config.placeholder.selection')"
                     entity="product"
                     :criteria="productCriteria"

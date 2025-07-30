@@ -5,14 +5,14 @@
         @change-sales-channel-id="onSalesChannelChanged"
     />
     <sw-single-select
-        v-model:value="selectedCategory"
+        v-model="selectedCategory"
         :label="$tc('sw-seo-url.labelCategorySelect')"
         :placeholder="$tc('sw-seo-url.placeholderCategorySelect')"
         :options="categoryOptions"
         :disabled="!currentSalesChannelId"
-        label-property="name"
-        value-property="id"
-        @update:value="onCategoryChanged"
+        labelProperty="name"
+        valueProperty="id"
+        @change="onCategoryChanged"
         />
 </div>
 {% endblock %}

@@ -5,7 +5,7 @@
 >
 
     <div class="sw-cms-designer-logo-preview__image">
-        <img :src="assetFilter('shirtnetworkplugin/static/img/background_designer_logo_preview.jpg')">
+        <img :src="'shirtnetworkplugin/static/img/background_designer_logo_preview.jpg' | asset">
     </div>
 
     <div v-if="!hideText">

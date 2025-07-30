@@ -8,7 +8,6 @@ use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 
@@ -55,11 +54,11 @@ class ProductSyncer {
         foreach($syncSettings->products as $pid){
             $product = $this->apiClient->SOAPRequest($this->salesChannelId, "ProductService", "getById", array("id" => $pid));
             $combinations = $this->syncPropertyGroups($product, $syncSettings->variantPropertyGroup, $syncSettings->sizePropertyGroup);
-            $this->syncProduct($product,$combinations,$syncSettings);
-            $this->syncVariants($product,$combinations,$syncSettings);
-            /*if (!$syncSettings->variantExpressionForListings && count($variantData)){
+            $productData = $this->syncProduct($product,$combinations,$syncSettings);
+            $variantData = $this->syncVariants($product,$combinations,$syncSettings);
+            if (!$syncSettings->variantExpressionForListings && count($variantData)){
                 $this->assignMainVariant($productData[0],$variantData);
-            }*/
+            }
         }
 
         return true;
@@ -72,50 +71,18 @@ class ProductSyncer {
         $firstMedias = isset($combinations[0]) ? $this->mediaSyncer->getMediaFiles($this->salesChannelId, $this->context, $combinations[0]['pictures']) : [];
         $sizes = $this->getProductSizes($product);
 
-        if ($syncSettings->variantExpressionForListings) {
-            $configuratorGroupConfig = [["id" => $syncSettings->variantPropertyGroup, "representation" => "box", "expressionForListings" => true]];
-            if (count($sizes)) {
-                $configuratorGroupConfig[] = ["id" => $syncSettings->sizePropertyGroup, "representation" => "box", "expressionForListings" => false];
-            }
-
-            $variantListingConfig = [
-                'configuratorGroupConfig' => $configuratorGroupConfig,
-                'displayParent' => false
-            ];
-        }else{
-            $variantListingConfig = [
-                'configuratorGroupConfig' => [],
-                'displayParent' => true
-            ];
+        $configuratorGroupConfig = [["id" => $syncSettings->variantPropertyGroup, "representation" => "box", "expressionForListings" => $syncSettings->variantExpressionForListings]];
+        if (count($sizes)) {
+            $configuratorGroupConfig[] = ["id" => $syncSettings->sizePropertyGroup, "representation" => "box", "expressionForListings" => true];
         }
-
-
-        $id = md5($safeID,false);
-        $productNumber = $product->artNr;
-
-        $existingProductCriteria = new Criteria();
-        $existingProductCriteria->addFilter(
-            new NotFilter(
-                NotFilter::CONNECTION_AND, [new EqualsFilter("id", $id)]
-            )
-        );
-        $existingProductCriteria->addFilter(
-            new EqualsFilter('productNumber', $productNumber)
-        );
-
-        $existingIds = $this->productRepository->searchIds($existingProductCriteria, $this->context);
-        if ($existingIds->getTotal()){
-            $productNumber .= '-'.uniqid();
-        }
-
 
         $productData = [
             [
-                'id' => $id,
+                'id' => md5($safeID,false),
                 'name' => $product->name,
-                'variantListingConfig' => $variantListingConfig,
+                'configuratorGroupConfig' => $configuratorGroupConfig,
                 'configuratorSettings' => $configuratorSettings,
-                'productNumber' => $productNumber,
+                'productNumber' => $product->artNr.'-'.uniqid(),
                 'description' => $product->description,
                 'stock' => 99999,
                 'customFields' => ['is_shirtnetwork' => true],
@@ -135,6 +102,8 @@ class ProductSyncer {
         try {
             $this->productRepository->upsert($productData, $this->context);
         } catch (\Exception $e) {
+            print_r($combinations);
+            print_r($productData);
             throw($e);
         }
         $visibilities = array_map(function($ch) use ($safeID) { return ['id' => md5($safeID.$ch,false), 'productId' => md5($safeID,false), 'salesChannelId' => $ch, 'visibility' => 30];}, $syncSettings->salesChannels);
@@ -152,7 +121,7 @@ class ProductSyncer {
             $data = [
                 'id' => md5($safeOptionID,false),
                 'name' => $product->name . ' ' . $combination['name'],
-                'coverId' => count($media) ? $media[0]['id'] : null,
+                'coverId' => $media[0]['id'],
                 'productNumber' => $combination['sku'],
                 'options' => $combination['option'],
                 'parentId' => md5($safeID,false),
@@ -174,10 +143,26 @@ class ProductSyncer {
         try{
             $this->productRepository->upsert($variantsData,$this->context);
         }catch(\Exception $e){
+            print_r($variantsData);
             throw($e);
         }
 
         return $variantsData;
+    }
+
+    protected function assignMainVariant($product,$variants){
+        try{
+            $this->productRepository->update([[
+                'id' => $product['id'],
+                'mainVariantId' => $variants[0]['id']
+            ]],$this->context);
+        } catch (\Exception $e) {
+            print_r([[
+                'id' => $product['id'],
+                'mainVariantId' => $variants[0]['id']
+            ]]);
+            throw($e);
+        }
     }
 
     protected function removeProductMedia($pid) {

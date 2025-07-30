@@ -3,7 +3,7 @@
     {% if product.customFields.is_shirtnetwork %}
     <div class="cms-element-designer-button">
         {% block element_designer_button_inner %}
-            <a href="{{ product.extensions.shirtnetwork.url }}" class="{% if element.config.buttonClass.value %}{{ element.config.buttonClass.value }}{% else %}btn btn-designer btn-primary{% endif %}">
+            <a href="{{ product.extensions.shirtnetwork.url }}" class="btn btn-designer btn-primary {{ element.config.buttonClass.value }}">
                 {{ element.config.label.value }}
             </a>
         {% endblock %}

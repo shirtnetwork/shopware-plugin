@@ -11,7 +11,6 @@ use Shopware\Core\Checkout\Cart\LineItem\CartDataCollection;
 use Shopware\Core\Checkout\Cart\LineItem\LineItem;
 use Shopware\Core\Checkout\Cart\LineItem\LineItemCollection;
 use Shopware\Core\Checkout\Cart\Price\QuantityPriceCalculator;
-use Shopware\Core\Checkout\Cart\Price\Struct\CartPrice;
 use Shopware\Core\Checkout\Cart\Price\Struct\QuantityPriceDefinition;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 
@@ -54,7 +53,7 @@ class ShirtnetworkPriceCollector implements CartDataCollectorInterface, CartProc
                 $key = $this->buildKey($product->getPayloadValue('shirtnetwork'));
 
                 // Needs implementation, just an example
-                $newPrice = $this->priceCalculator->getPrice($context->getSalesChannelId(), $product->getPayloadValue('shirtnetwork'), $product->getQuantity(), $context->getTaxState() !== CartPrice::TAX_STATE_GROSS);
+                $newPrice = $this->priceCalculator->getPrice($context->getSalesChannelId(), $product->getPayloadValue('shirtnetwork'), $product->getQuantity());
 
                 // we have to set a value for each product id to prevent duplicate queries in next calculation
                 $data->set($key, $newPrice);

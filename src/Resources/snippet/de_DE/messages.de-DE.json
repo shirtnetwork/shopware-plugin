@@ -22,13 +22,7 @@
             },
             "text": {
                 "font": "Schriftart"
-            },
-            "option": {
-                "yes": "Ja",
-                "no": "Nein"
-            },
-            "typeSample": "Andruckmuster",
-            "correctionView": "Korrekturabzug"
+            }
         },
         "designer": {
             "add_to_cart": "In den Warenkorb",
