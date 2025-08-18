@@ -1,3 +1,19 @@
+{% if config.options.showCorrectionView %}
+    <div>
+        {{ 'shirtnetwork.config.correctionView' | trans }}: {% if config.options.correctionView %}{{ 'shirtnetwork.config.option.yes'|trans }}{% else %}{{ 'shirtnetwork.config.option.no'|trans }}{% endif %}
+    </div>
+{% endif %}
+
+{% if config.options.showTypeSample %}
+    <div>
+        {{ 'shirtnetwork.config.typeSample' | trans }}: {% if config.options.typeSample %}{{ 'shirtnetwork.config.option.yes'|trans }}{% else %}{{ 'shirtnetwork.config.option.no'|trans }}{% endif %}
+    </div>
+{% endif %}
+
+{% if config.options.showCorrectionView or config.options.showTypeSample %}
+<hr/>
+{% endif %}
+
 {% for object in objects %}
     <div class="d-flex  align-items-center mt-2">
         <div class="flex-shrink-0 mr-2" style="width: 87px">

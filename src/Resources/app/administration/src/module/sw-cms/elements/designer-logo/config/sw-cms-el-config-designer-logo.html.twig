@@ -6,7 +6,7 @@
 
     {% block sw_cms_element_designer_logo_config_layout_select %}
     <sw-select-field
-        v-model="element.config.boxLayout.value"
+        v-model:value="element.config.boxLayout.value"
         :label="$tc('sw-cms.elements.productBox.config.label.layoutType')"
     >
         {% block sw_cms_element_designer_logo_config_layout_select_options %}
@@ -25,7 +25,7 @@
 
     {% block sw_cms_element_designer_logo_config_displaymode_select %}
     <sw-select-field
-        v-model="element.config.displayMode.value"
+        v-model:value="element.config.displayMode.value"
         :label="$tc('sw-cms.elements.general.config.label.displayMode')"
     >
         {% block sw_cms_element_designer_logo_config_displaymode_select_options %}
@@ -44,7 +44,7 @@
 
     {% block sw_cms_element_designer_logo_config_settings_vertical_align %}
     <sw-select-field
-        v-model="element.config.verticalAlign.value"
+        v-model:value="element.config.verticalAlign.value"
         :label="$tc('sw-cms.elements.general.config.label.verticalAlign')"
         :placeholder="$tc('sw-cms.elements.general.config.label.verticalAlign')"
     >

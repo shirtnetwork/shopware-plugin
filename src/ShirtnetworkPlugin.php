@@ -48,6 +48,8 @@ class ShirtnetworkPlugin extends Plugin
                 ]
             ], $installContext->getContext());
         }
+
+
     }
 
     public function uninstall(UninstallContext $uninstallContext): void

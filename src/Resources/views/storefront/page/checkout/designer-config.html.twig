@@ -22,5 +22,4 @@
         <span class="visually-hidden">Weiter</span>
     </button>
 </div>
-
-{% sw_include '@ShirtnetworkPlugin/storefront/page/checkout/designer-config-objects.html.twig' with { objects: page.config.objects } %}
+{% sw_include '@ShirtnetworkPlugin/storefront/page/checkout/designer-config-objects.html.twig' with { config: page.config, objects: page.config.objects } %}

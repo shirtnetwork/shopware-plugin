@@ -10,7 +10,9 @@
 {% block base_content %}
     <template id="shirtnetwork-designer" data-shirtnetwork-plugin data-shirtnetwork-plugin-options="{{ shirtnetworkPluginOptions|default({})|json_encode|escape('html_attr') }}"></template>
 
-    {% block designer_overrides %}{% endblock %}
+    {% block designer_overrides %}
+        {% includeDir '@Storefront/storefront/page/shirtnetwork/overrides' recursive %}
+    {% endblock %}
 
     <div class="shirtnetwork-designer-description product-detail-tabs" data-shirtnetwork-description-plugin>
 

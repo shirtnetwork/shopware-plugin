@@ -1,5 +1,6 @@
 {% block element_designer_logo_listing %}
     {% set searchResult = element.data %}
+    {% if searchResult.total %}
     {% set listingColumns = 'col-sm-6 col-lg-4 col-xl-3' %}
 
     {% if section and section.type == 'sidebar' %}
@@ -19,7 +20,7 @@
     {% set sidebar = sectionType == 'sidebar' %}
     {% set params = { slots: slot.id, 'no-aggregations': 1 } %}
 
-    {% block element_product_listing_wrapper %}
+    {% block element_designer_logo_listing_wrapper %}
 
         {% sw_include '@Storefront/storefront/component/designer-logo/listing.html.twig' with {
             searchResult: searchResult,
@@ -33,4 +34,5 @@
         } %}
 
     {% endblock %}
+    {% endif %}
 {% endblock %}
