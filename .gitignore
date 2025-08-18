@@ -1,7 +1,0 @@
-.idea
-.secrets
-.DS_STORE
-node_modules
-*.zip
-vendor
-composer.lock
