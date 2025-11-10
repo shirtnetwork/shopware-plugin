@@ -32,9 +32,21 @@
                                         </a>
                                     </div>
                                 </dd>
+                                <dd v-if="object.type === 'logo'">
+                                    <div>
+                                        <a :href="object.picture" target="_blank" class="shirtnetwork-order-details-upload-preview-link">
+                                            <img :src="object.picture" :alt="$tc('shirtnetwork-order.details.objectFilePreview')" class="shirtnetwork-order-details-upload-preview-image">
+                                        </a>
+                                    </div>
+                                </dd>
                                 <dt v-if="hasFills(object)">{{ $tc('shirtnetwork-order.details.objectFills') }}</dt>
                                 <dd v-if="hasFills(object)">
-                                    <div v-for="(fill,fillIndex) in object.fills" v-if="fill">{{ $tc('shirtnetwork-order.details.objectFill') }} {{ fillIndex + 1 }}: {{ fill.name }}</div>
+                                    <div v-for="(fill,fillIndex) in object.fills">
+                                        <span v-if="fill">
+                                            {{ $tc('shirtnetwork-order.details.objectFill') }}
+                                            {{ fillIndex + 1 }}: {{ fill.name }}
+                                        </span>
+                                    </div>
                                 </dd>
                                 <dt>{{ $tc('shirtnetwork-order.details.objectPrinttype') }}</dt>
                                 <dd>{{ object.printtype }}</dd>
