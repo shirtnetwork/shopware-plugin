@@ -19,6 +19,8 @@
                             <sw-description-list>
                                 <dt v-if="object.type === 'text'">{{ $tc('shirtnetwork-order.details.objectText') }}</dt>
                                 <dd v-if="object.type === 'text'"><pre>{{ object.text }}</pre></dd>
+                                <dt v-if="object.type === 'text'">{{ $tc('shirtnetwork-order.details.objectFont') }}</dt>
+                                <dd v-if="object.type === 'text'"><pre>{{ object.font }}</pre></dd>
                                 <dt v-if="object.type === 'user-logo'">{{ $tc('shirtnetwork-order.details.objectFile') }}</dt>
                                 <dd v-if="object.type === 'user-logo'">
                                     <div>

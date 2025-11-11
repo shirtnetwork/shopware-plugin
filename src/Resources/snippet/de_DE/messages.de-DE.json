@@ -227,6 +227,7 @@
             "objectText": "Text",
             "objectFills": "Farben",
             "objectFill": "Farbe",
+            "objectFont": "Schriftart",
             "objectPrinttype": "Druckart",
             "objectDimensions": "Größe",
             "objectLogo": "Motiv",
