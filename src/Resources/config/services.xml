@@ -13,9 +13,6 @@
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
-            <call method="setTwig">
-                <argument type="service" id="twig"/>
-            </call>
         </service>
         <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Storefront\Page\Shirtnetwork\ShirtnetworkDesignerPageLoader" public="true">
             <argument type="service" id="Shopware\Storefront\Page\GenericPageLoader" />
@@ -27,9 +24,6 @@
             <argument type="service" id="Aggrosoft\Shopware\ShirtnetworkPlugin\Storefront\Page\Shirtnetwork\Config\ShirtnetworkDesignerConfigPageLoader"/>
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
-            </call>
-            <call method="setTwig">
-                <argument type="service" id="twig"/>
             </call>
         </service>
         <service id="Aggrosoft\Shopware\ShirtnetworkPlugin\Storefront\Page\Shirtnetwork\Config\ShirtnetworkDesignerConfigPageLoader" public="true">
