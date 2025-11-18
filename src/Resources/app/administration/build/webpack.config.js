@@ -1,5 +1,5 @@
 const { join, resolve } = require('path');
-module.exports = () => {
+module.exports = (params) => {
   return {
     resolve: {
       modules: [
