@@ -64,5 +64,16 @@
         "blockCategoryShirtnetwork": "Shirtnetwork"
       }
     }
+  },
+  "apps": {
+    "sw-cms": {
+      "detail": {
+        "label": {
+          "blockCategory": {
+            "shirtnetwork": "Shirtnetwork"
+          }
+        }
+      }
+    }
   }
 }

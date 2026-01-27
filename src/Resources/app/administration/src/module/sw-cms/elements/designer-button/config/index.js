@@ -69,8 +69,6 @@ Shopware.Component.register('sw-cms-el-config-designer-button', {
         },
 
         onElementUpdate(value) {
-            this.element.config.label.value = value;
-
             this.$emit('element-update', this.element);
         },
 
