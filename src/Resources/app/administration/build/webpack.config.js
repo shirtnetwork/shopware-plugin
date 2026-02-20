@@ -1,10 +1,12 @@
 const { join, resolve } = require('path');
-module.exports = (params) => {
+module.exports = () => {
   return {
     resolve: {
-      modules: [
-        `${params.basePath}/Resources/app/administration/node_modules`,
-      ]
+      alias: {
+        '@socket.io-client': resolve(
+          join(__dirname, '..', 'node_modules', 'socket.io-client')
+        )
+      }
     }
   };
 }
