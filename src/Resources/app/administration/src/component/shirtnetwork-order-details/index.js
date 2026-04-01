@@ -1,6 +1,6 @@
 import template from './shirtnetwork-order-details.html.twig';
 import './shirtnetwork-order-details.scss';
-import io from "@socket.io-client/dist/socket.io.js";
+import { io } from "socket.io-client";
 
 const EPS_TOOL_HOST = 'https://localhost:9083'
 
@@ -86,9 +86,9 @@ Shopware.Component.register('shirtnetwork-order-details', {
             this.showDetailsModal = false;
         },
         connectEpsTool() {
-            this.epsToolSocket = io.connect(EPS_TOOL_HOST, {
-                "reconnection delay" : 2000,
-                "force new connection" : true
+            this.epsToolSocket = io(EPS_TOOL_HOST, {
+                reconnectionDelayMax : 2000,
+                forceNew : true
             });
 
             this.epsToolSocket.on("connect", () => {

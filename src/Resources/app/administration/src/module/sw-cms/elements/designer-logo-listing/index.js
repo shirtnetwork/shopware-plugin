@@ -14,6 +14,10 @@ Shopware.Service('cmsService').registerCmsElement({
         boxLayout: {
             source: 'static',
             value: 'standard',
+        },
+        listingColumns: {
+            source: 'static',
+            value: '',
         }
     },
 });

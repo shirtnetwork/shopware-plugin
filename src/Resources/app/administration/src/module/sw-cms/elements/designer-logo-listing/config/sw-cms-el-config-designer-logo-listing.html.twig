@@ -1,5 +1,8 @@
 {% block sw_cms_element_designer_logo_listing_config %}
 <div class="sw-cms-el-config-designer-logo-listing">
-
+    <mt-text-input
+        :label="$tc('sw-cms.elements.designerLogoListing.config.label.listingColumns')"
+        :model-value="element.config.listingColumns.value"
+    />
 </div>
 {% endblock %}

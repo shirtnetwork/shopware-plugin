@@ -32,6 +32,13 @@
             "designNow": "Jetzt gestalten"
           }
         }
+      },
+      "designerLogoListing": {
+        "config": {
+          "label": {
+            "listingColumns": "Bootstrap Spaltenanzahl (z.B. 'col-6 col-md-4 col-lg-3')"
+          }
+        }
       }
     },
     "blocks": {
@@ -62,6 +69,17 @@
     "detail":{
       "label": {
         "blockCategoryShirtnetwork": "Shirtnetwork"
+      }
+    }
+  },
+  "apps": {
+    "sw-cms": {
+      "detail": {
+        "label": {
+          "blockCategory": {
+            "shirtnetwork": "Shirtnetwork"
+          }
+        }
       }
     }
   }
