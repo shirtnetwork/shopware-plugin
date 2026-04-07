@@ -1,0 +1,15 @@
+{% sw_extends '@Storefront/storefront/component/product/card/action.html.twig' %}
+
+{% block component_product_box_action_buttons %}
+    {% if config('ShirtnetworkPlugin.config.designerbuttonlisting') and product.translated.customFields.is_shirtnetwork  %}
+        <div class="d-grid">
+            <a class="btn btn-info btn-shirtnetwork"
+                href="{{ product.extensions.shirtnetwork.url }}"
+                title="{{ "shirtnetwork.detail.configureProduct"|trans|striptags }}"
+                aria-label="{{ "shirtnetwork.detail.configureProduct"|trans|striptags }}">
+                {{ "shirtnetwork.detail.configureProduct"|trans|sw_sanitize }}
+            </a>
+        </div>
+    {% endif %}
+    {{ parent() }}
+{% endblock %}

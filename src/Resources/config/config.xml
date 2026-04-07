@@ -120,6 +120,13 @@
         </input-field>
     </card>
     <card>
+        <title>Storefront</title>
+        <input-field type="checkbox">
+            <name>designerbuttonlisting</name>
+            <label>Designer Button im Listing anzeigen</label>
+        </input-field>
+    </card>
+    <card>
         <title>Matcher</title>
         <input-field type="textarea">
             <name>productskumatcher</name>
