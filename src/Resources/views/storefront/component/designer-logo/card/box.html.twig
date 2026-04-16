@@ -23,7 +23,7 @@
                                    class="designer-logo-image-link is-{{ displayMode }}">
                                     {% block component_designer_logo_box_image_link_inner %}
                                         <img
-                                                src="//api.shirtnetwork.de/out/logos/{{ supplier }}/{{ logo.svg ? logo.svg : logo.picture }}"
+                                                src="//api.shirtnetwork.de/out/logos/{{ supplier }}/{{ logo.picture ? logo.picture : logo.svg }}"
                                                 class="designer-logo-image is-{{ displayMode }}"
                                                 alt="{{ name }}"
                                                 title="{{ name }}"
