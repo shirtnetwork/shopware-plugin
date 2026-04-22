@@ -1,4 +1,4 @@
-{% set currentPage = ((searchResult.criteria.offset + 1) / searchResult.criteria.limit )|round(0, 'ceil') %}
+{% set currentPage = ((searchResult.offset + 1) / searchResult.limit )|round(0, 'ceil') %}
 {% set paginationConfig = { page: currentPage, parentFilterPanelSelector: '.cms-element-designer-logo-listing-wrapper' }|json_encode %}
 
 {% if disableEmptyFilter is not defined %}
@@ -30,8 +30,7 @@
                             <div class="col-md-auto">
                                 {% block element_designer_logo_listing_pagination_nav_top %}
                                     {% sw_include '@Storefront/storefront/component/pagination.html.twig' with {
-                                        entities: searchResult,
-                                        criteria: searchResult.criteria
+                                        entities: searchResult
                                     } %}
                                 {% endblock %}
                             </div>
@@ -74,7 +73,6 @@
                     {% block element_designer_logo_listing_pagination_nav_bottom %}
                         {% sw_include '@Storefront/storefront/component/pagination.html.twig' with {
                             entities: searchResult,
-                            criteria: searchResult.criteria,
                             paginationLocation: 'bottom',
                         } %}
                     {% endblock %}

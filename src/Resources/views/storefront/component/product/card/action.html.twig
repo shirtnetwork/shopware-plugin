@@ -1,8 +1,9 @@
 {% sw_extends '@Storefront/storefront/component/product/card/action.html.twig' %}
 
 {% block component_product_box_action_buttons %}
+    {{ parent() }}
     {% if config('ShirtnetworkPlugin.config.designerbuttonlisting') and product.translated.customFields.is_shirtnetwork  %}
-        <div class="d-grid">
+        <div class="d-grid btn-shirtnetwork-container mt-2">
             <a class="btn btn-info btn-shirtnetwork"
                 href="{{ product.extensions.shirtnetwork.url }}"
                 title="{{ "shirtnetwork.detail.configureProduct"|trans|striptags }}"
@@ -11,5 +12,4 @@
             </a>
         </div>
     {% endif %}
-    {{ parent() }}
 {% endblock %}

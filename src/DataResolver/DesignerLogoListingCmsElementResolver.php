@@ -70,12 +70,9 @@ class DesignerLogoListingCmsElementResolver extends AbstractCmsElementResolver
             'logos' => $logos,
             'supplier' => $this->apiClient->getSupplierId($salesChannelId),
             'total' => $total,
-            'criteria' => [
-                'offset' => ($page - 1) * 15,
-                'limit' => 15,
-                'total' => $total,
-                'page' => $page
-            ],
+            'offset' => ($page - 1) * 15,
+            'limit' => 15,
+            'page' => $page,
             'currentFilters' => $contextData
         ]));
 
