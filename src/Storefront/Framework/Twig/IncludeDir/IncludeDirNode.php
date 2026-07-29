@@ -8,6 +8,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RecursiveRegexIterator;
 use RegexIterator;
+use Shopware\Core\Framework\Adapter\Twig\TemplateFinderInterface;
 use Shopware\Core\Framework\Adapter\Twig\Node\SwInclude;
 use Twig\Compiler;
 use Twig\Error\LoaderError;
@@ -15,7 +16,6 @@ use Twig\Loader\ChainLoader;
 use Twig\Loader\FilesystemLoader;
 use Twig\Node\Expression\AbstractExpression;
 use Twig\Node\Expression\ConstantExpression;
-use Twig\Node\IncludeNode;
 use Twig\Node\Node;
 use Twig\Node\NodeOutputInterface;
 use Twig\Attribute\YieldReady;
@@ -30,7 +30,9 @@ class IncludeDirNode extends Node implements NodeOutputInterface
 {
     public function __construct(
         AbstractExpression $expr,
-        AbstractExpression $variables = null,
+        private readonly TemplateFinderInterface $finder,
+        private readonly ?string $namespace = null,
+        ?AbstractExpression $variables = null,
         bool $recursive = false,
         bool $only = false,
         int $lineno = 0,
@@ -59,55 +61,40 @@ class IncludeDirNode extends Node implements NodeOutputInterface
      */
     public function compile(Compiler $compiler): void
     {
-        /** @var ChainLoader $mainLoader */
         $mainLoader = $compiler->getEnvironment()->getLoader();
+        $loaders = $mainLoader instanceof ChainLoader ? $mainLoader->getLoaders() : [$mainLoader];
+        $templateDirectory = trim(
+            str_replace('\\', '/', $this->getNode('expr')->getAttribute('value')),
+            '/'
+        );
+        $discoveredTemplates = [];
 
-        if ($mainLoader instanceof FilesystemLoader) {
-            $mainLoader = new ChainLoader([$mainLoader]);
-        }
+        foreach ($loaders as $loader) {
+            if (!$loader instanceof FilesystemLoader) {
+                continue;
+            }
 
-        $includePath = '';
-        $loaderPath  = '';
-        $allPaths = [];
-
-        foreach ($mainLoader->getLoaders() as $loader) {
-            if ($loader instanceof FilesystemLoader) {
-
-                foreach ($loader->getPaths() as $path) {
-                    if (is_dir($path . '/' . $this->getNode('expr')->getAttribute('value'))) {
-                        $includePath = $path . '/' . $this->getNode('expr')->getAttribute('value');
-                        $loaderPath  = $path;
-                        break;
-                    }
-                }
-
-                $allPaths = array_merge($allPaths, $loader->getPaths());
+            foreach ($this->findTemplates($loader, $templateDirectory) as $template) {
+                $discoveredTemplates[$template] = true;
             }
         }
 
-        if (empty($includePath)) {
-            return;
-        }
+        $templates = array_filter(
+            array_keys($discoveredTemplates),
+            $this->isAvailableInTemplateHierarchy(...)
+        );
+        sort($templates, SORT_STRING);
 
-        if ($this->getAttribute('recursive')) {
-            $directory = new RecursiveDirectoryIterator($includePath);
-            $iterator = new RecursiveIteratorIterator($directory);
-            $foundFiles = new RegexIterator($iterator, '/^.+\.twig$/i', RecursiveRegexIterator::GET_MATCH);
-
-            $files = [];
-            foreach ($foundFiles as $file) {
-                $files[] = $file[0];
+        foreach ($templates as $templateName) {
+            if ($this->namespace !== null) {
+                $templateName = $this->namespace . '/' . $templateName;
             }
-        } else {
-            $files = glob($includePath . '/*.twig');
-        }
 
-        sort($files);
-
-        foreach ($files as $file) {
-            $file = str_replace(DIRECTORY_SEPARATOR, '/', str_replace($loaderPath, '', $file));
+            // A template may exist in multiple theme/plugin layers. Include the
+            // logical name once and let SwInclude resolve the highest-priority
+            // version through Shopware's template inheritance hierarchy.
             $template = new SwInclude(
-                new ConstantExpression($file, $this->lineno),
+                new ConstantExpression($templateName, $this->lineno),
                 $this->hasNode('variables') ? $this->getNode('variables') : null,
                 $this->getAttribute('only'),
                 false,
@@ -116,5 +103,60 @@ class IncludeDirNode extends Node implements NodeOutputInterface
 
             $template->compile($compiler);
         }
+    }
+
+    /**
+     * @return iterable<string>
+     */
+    private function findTemplates(FilesystemLoader $loader, string $templateDirectory): iterable
+    {
+        foreach ($loader->getPaths() as $loaderPath) {
+            $loaderPath = rtrim($loaderPath, '/\\');
+            $includePath = $loaderPath . DIRECTORY_SEPARATOR . str_replace(
+                '/',
+                DIRECTORY_SEPARATOR,
+                $templateDirectory
+            );
+
+            if (!is_dir($includePath)) {
+                continue;
+            }
+
+            if ($this->getAttribute('recursive')) {
+                $directory = new RecursiveDirectoryIterator($includePath);
+                $iterator = new RecursiveIteratorIterator($directory);
+                $foundFiles = new RegexIterator($iterator, '/^.+\.twig$/i', RecursiveRegexIterator::GET_MATCH);
+
+                foreach ($foundFiles as $file) {
+                    yield $this->getRelativeTemplateName($loaderPath, $file[0]);
+                }
+
+                continue;
+            }
+
+            foreach (glob($includePath . '/*.twig') ?: [] as $file) {
+                yield $this->getRelativeTemplateName($loaderPath, $file);
+            }
+        }
+    }
+
+    private function getRelativeTemplateName(string $loaderPath, string $file): string
+    {
+        return ltrim(
+            str_replace(DIRECTORY_SEPARATOR, '/', substr($file, strlen($loaderPath))),
+            '/'
+        );
+    }
+
+    private function isAvailableInTemplateHierarchy(string $template): bool
+    {
+        if ($this->namespace === null) {
+            return true;
+        }
+
+        return str_starts_with(
+            $this->finder->find($this->namespace . '/' . $template, true),
+            '@'
+        );
     }
 }

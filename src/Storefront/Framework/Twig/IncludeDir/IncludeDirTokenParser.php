@@ -45,6 +45,7 @@ class IncludeDirTokenParser extends AbstractTokenParser
         $source = $stream->getSourceContext()->getName();
         $expr = $this->parser->getExpressionParser()->parseExpression();
         $template = $expr->getAttribute('value');
+        $namespace = $this->getNamespace($template);
 
         $parent = $this->finder->find($template, true, $source);
         $expr->setAttribute('value', $parent);
@@ -53,12 +54,25 @@ class IncludeDirTokenParser extends AbstractTokenParser
 
         return new IncludeDirNode(
             $expr,
+            $this->finder,
+            $namespace,
             $variables,
             $recursive,
             $only,
             $token->getLine(),
             $this->getTag()
         );
+    }
+
+    private function getNamespace(string $template): ?string
+    {
+        if (!str_starts_with($template, '@')) {
+            return null;
+        }
+
+        $separator = strpos($template, '/');
+
+        return $separator === false ? null : substr($template, 0, $separator);
     }
 
     /**
