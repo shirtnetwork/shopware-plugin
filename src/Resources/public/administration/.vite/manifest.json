@@ -1,0 +1,11 @@
+{
+  "main.js": {
+    "file": "js/shirtnetwork-plugin.js",
+    "name": "shirtnetwork-plugin",
+    "src": "main.js",
+    "isEntry": true,
+    "css": [
+      "css/shirtnetwork-plugin.css"
+    ]
+  }
+}
