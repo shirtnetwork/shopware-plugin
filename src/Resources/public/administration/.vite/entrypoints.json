@@ -1,0 +1,25 @@
+{
+  "base": "/bundles/shirtnetworkplugin/administration/",
+  "entryPoints": {
+    "shirtnetwork-plugin": {
+      "css": [
+        "/bundles/shirtnetworkplugin/administration/css/shirtnetwork-plugin.css"
+      ],
+      "dynamic": [],
+      "js": [
+        "/bundles/shirtnetworkplugin/administration/js/shirtnetwork-plugin.js"
+      ],
+      "legacy": false,
+      "preload": []
+    }
+  },
+  "legacy": false,
+  "metadatas": {},
+  "version": [
+    "7.0.4",
+    7,
+    0,
+    4
+  ],
+  "viteServer": null
+}
