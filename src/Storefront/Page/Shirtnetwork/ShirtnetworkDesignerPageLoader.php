@@ -49,7 +49,7 @@ class ShirtnetworkDesignerPageLoader
             'text' => $request->query->get('text', ''),
             'font' => $request->query->get('font', ''),
             'amount' => $request->query->get('amount', ''),
-            'printtype' => $request->query->get('sartnr', ''),
+            'printtype' => $request->query->get('printtype', ''),
             'keep' => $request->query->get('keep', '')
         ]);
 
