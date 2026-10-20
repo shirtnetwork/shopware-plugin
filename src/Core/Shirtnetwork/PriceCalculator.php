@@ -219,9 +219,13 @@ class PriceCalculator {
     protected function _getAllObjectsColors($salesChannelId, $objects) {
         $objectColors = [];
         foreach ($objects as $object) {
-            foreach ($object->meta->fills as $fill) {
+            $printtypeId = $object->meta->printtype->id ?? null;
+            if (!$printtypeId) {
+                continue;
+            }
+            foreach ($object->meta->fills ?? [] as $fill) {
                 if ($fill) {
-                    $color = $this->_getColorById($salesChannelId, $object->meta->printtype->id, $fill->id);
+                    $color = $this->_getColorById($salesChannelId, $printtypeId, $fill->id);
                     if ($color) {
                         $objectColors[] = $color;
                     }
@@ -281,10 +285,11 @@ class PriceCalculator {
 
     protected function _getUserUploadObjectPrice (string $salesChannelId, $object, $oProduct, $oVariant) {
         $oShirtnetwork = $this->client;
-        $oPrinttype = $oShirtnetwork->getPrinttypeById($salesChannelId, $object->meta->printtype->id);
+        $printtypeId = $object->meta->printtype->id ?? null;
+        $oPrinttype = $printtypeId ? $oShirtnetwork->getPrinttypeById($salesChannelId, $printtypeId) : null;
 
         $objectPrice = $oProduct->uploadPrice; // + $oVariant->uploadPrice;
-        $objectPrice += $oPrinttype->uploadPrice;
+        $objectPrice += $oPrinttype->uploadPrice ?? 0;
         return $objectPrice;
     }
 
@@ -293,7 +298,7 @@ class PriceCalculator {
         $ocm = $this->_getObjectSize($oView, $object);
 
         // Get printtypes pixel price
-        $ppx = $this->getPrinttypePixelPrice($salesChannelId, $object->meta->printtype->id, $ocm);
+        $ppx = $this->getPrinttypePixelPrice($salesChannelId, $object->meta->printtype->id ?? null, $ocm);
 
         $objectPrice = floatval(bcmul($ocm, strval($ppx)));
 
@@ -334,6 +339,9 @@ class PriceCalculator {
      * Get either the default or the scale pixelPrice for a printtype
      */
     protected function getPrinttypePixelPrice(string $salesChannelId, $printtype, $size) {
+        if (!$printtype) {
+            return 0;
+        }
         $oShirtnetwork = $this->client;
         $oPrinttype = $oShirtnetwork->getPrinttypeById($salesChannelId, $printtype);
 
@@ -384,10 +392,14 @@ class PriceCalculator {
 
     protected function _getObjectColorPrice (string $salesChannelId, $object) {
         $colorPrice = 0;
+        $printtypeId = $object->meta->printtype->id ?? null;
+        if (!$printtypeId) {
+            return $colorPrice;
+        }
 
-        foreach ($object->meta->fills as $fill) {
+        foreach ($object->meta->fills ?? [] as $fill) {
             if ($fill) {
-                $color = $this->_getColorById($salesChannelId, $object->meta->printtype->id, $fill->id);
+                $color = $this->_getColorById($salesChannelId, $printtypeId, $fill->id);
                 $colorPrice += $color ? $color->price : 0;
             }
         }
@@ -406,8 +418,9 @@ class PriceCalculator {
         $uploadSpecialPrice = 0;
 
         foreach ($aObjects as $object) {
-            if ($object->type === 'user-logo') {
-                $oPrinttype = $oShirtnetwork->getPrinttypeById($salesChannelId, $object->meta->printtype->id);
+            $printtypeId = $object->meta->printtype->id ?? null;
+            if ($object->type === 'user-logo' && $printtypeId) {
+                $oPrinttype = $oShirtnetwork->getPrinttypeById($salesChannelId, $printtypeId);
                 if ($oPrinttype) {
                     $uploadSpecialPrice += $oPrinttype->uploadSpecialPrice;
                 }
@@ -421,7 +434,7 @@ class PriceCalculator {
     protected function _getColorById (string $salesChannelId, $iPrinttype, $cid) {
         $oShirtnetwork = $this->client;
         $colors = $oShirtnetwork->getPrinttypeColors($salesChannelId, $iPrinttype);
-        foreach ($colors->source as $color) {
+        foreach ($colors->source ?? [] as $color) {
             if ($color->id === $cid)
                 return $color;
         }

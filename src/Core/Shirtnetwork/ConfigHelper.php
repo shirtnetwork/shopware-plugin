@@ -26,7 +26,7 @@ class ConfigHelper {
             $aObject =  array(
                 'type' => $object->type,
                 'fills' => $object->meta->fills,
-                'printtype' => $object->meta->printtype->name,
+                'printtype' => $object->meta->printtype->name ?? '',
                 'dimensions' => $showRealSizes ? $this->getObjectDimensions($oView,$object) : null,
                 'view' => $object->meta->view->key
             );
@@ -115,9 +115,12 @@ class ConfigHelper {
     }
 
     public function getPrinttypeName($salesChannelId, $iPrinttype){
+        if (!$iPrinttype) {
+            return '';
+        }
         $oShirtnetwork = $this->client;
         $oPrinttype = $oShirtnetwork->getPrinttypeById($salesChannelId, $iPrinttype);
-        return $oPrinttype->name;
+        return $oPrinttype->name ?? '';
     }
 
     public function getLogoName($salesChannelId, $iLogo){
